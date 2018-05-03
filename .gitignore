@@ -1,0 +1,8 @@
+builder/venv
+.idea
+#builder/scratch.py
+builder/source_data/AllSets-x.json
+
+builder/database/identity.py
+
+*.pyc
