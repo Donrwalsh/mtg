@@ -1,15 +1,21 @@
 import pymysql
 import database.identity
+from colorama import Fore
+from colorama import Style
 
 
 class DbCardPeon(object):
 
     def __init__(self):
-        self.conn = pymysql.connect(host=database.identity.host,
-                                    user=database.identity.user,
-                                    passwd=database.identity.passwd,
-                                    db=database.identity.db)
-        self.cur = self.conn.cursor()
+        try:
+            self.conn = pymysql.connect(host=database.identity.host,
+                                        user=database.identity.user,
+                                        passwd=database.identity.passwd,
+                                        db=database.identity.db)
+            self.cur = self.conn.cursor()
+        except pymysql.err.DatabaseError as e:
+            print(f"{Fore.LIGHTRED_EX}Critical error connecting to database: \n" + str(e))
+            exit()
 
     def reset_table(self, tableName):
         self.cur.execute("TRUNCATE TABLE `" + tableName + "`;")
