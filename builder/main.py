@@ -32,7 +32,6 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
         'MPS', 'C16', 'PCA', 'AER', ]
 
 
-
 # The JSON peon works with data from MTGJson
 JsonPeon = source_data.json_peon.JsonPeon('source_data')
 data = JsonPeon.import_data()
@@ -46,8 +45,24 @@ for set in sets:
     i += 1
     print(f"{Fore.BLUE}" + progress(i, len(sets)) + f"Synchronizing {Fore.YELLOW}" + set + f"{Fore.BLUE}.")
     for card in data[set]["cards"]:
+        name = "'" + card["name"].replace("'", "''") + "'"
+        if "names" in card:
+            names = JsonPeon.multi_value_translate(card["names"])
+        else:
+            names = name
+        if "manaCost" in card:
+            manaCost = "'" + card["manaCost"] + "'"
+        else:
+            manaCost = "null"
+        if "cmc" in card:
+            cmc = card["cmc"]
+        else:
+            cmc = "null"
         DbCardPeon.add_card(
-            card["name"].replace("'", "''")
+            name,
+            names,
+            manaCost,
+            cmc
         )
 
 DbCardPeon.close_connections()

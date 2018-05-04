@@ -40,5 +40,6 @@ class DbCardPeon(object):
         else:
             print(f"{Fore.BLUE}Database changes finalized.{Style.RESET_ALL}")
 
-    def add_card(self, name):
-        self.cur.execute("INSERT INTO cards (name) VALUES ('" + name + "');")
+    def add_card(self, name, names, manaCost, cmc):
+        self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc) VALUES (" +
+                         name + ", " + names + ", " + manaCost + ", " + str(cmc) + ");")
