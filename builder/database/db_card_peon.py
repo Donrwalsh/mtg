@@ -16,15 +16,29 @@ class DbCardPeon(object):
         except pymysql.err.DatabaseError as e:
             print(f"{Fore.LIGHTRED_EX}Critical error connecting to database: \n" + str(e))
             exit()
+        else:
+            print(f"{Fore.BLUE}Connected to database.{Style.RESET_ALL}")
 
     def reset_table(self, tableName):
-        self.cur.execute("TRUNCATE TABLE `" + tableName + "`;")
-        self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
+        try:
+            self.cur.execute("TRUNCATE TABLE `" + tableName + "`;")
+            self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
+        except pymysql.err.DatabaseError as e:
+            print(f"{Fore.LIGHTRED_EX}Critical error working with database: \n" + str(e))
+            exit()
+        else:
+            print(f"{Fore.BLUE}Table {Fore.YELLOW}`" + tableName + f"`{Fore.BLUE} has been wiped.{Style.RESET_ALL}")
 
     def close_connections(self):
-        self.conn.commit()
-        self.cur.close()
-        self.conn.close()
+        try:
+            self.conn.commit()
+            self.cur.close()
+            self.conn.close()
+        except pymysql.err.DatabaseError as e:
+            print(f"{Fore.LIGHTRED_EX}Critical error finalizing database changes: \n" + str(e))
+            exit()
+        else:
+            print(f"{Fore.BLUE}Database changes finalized.{Style.RESET_ALL}")
 
     def add_card(self, name):
-        self.cur.execute("INSERT INTO cards (name) VALUES ('" + name.replace("'", "''") + "');")
+        self.cur.execute("INSERT INTO cards (name) VALUES ('" + name + "');")
