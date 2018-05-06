@@ -5,11 +5,11 @@ import sys
 from colorama import Fore
 from colorama import Style
 import source_data.json_peon
-import database.db_card_peon
+import database.database_service
 from pprint import pprint
 
 JsonPeon = source_data.json_peon.JsonPeon('source_data')
-DbCardPeon = database.db_card_peon.DbCardPeon()
+DbCardPeon = database.database_service.DatabaseService()
 
 data = JsonPeon.import_data()
 sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '4ED',

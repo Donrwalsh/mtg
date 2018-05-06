@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import source_data.json_peon
-import database.db_card_peon
+import database.database_service
 
 from colorama import Fore
 from colorama import Style
@@ -39,8 +39,8 @@ JsonPeon = source_data.json_peon.JsonPeon('source_data')
 data = JsonPeon.import_data()
 
 # The Database Peon works with our local database
-DbCardPeon = database.db_card_peon.DbCardPeon()
-DbCardPeon.reset_table('cards')
+DatabaseService = database.database_service.DatabaseService()
+DatabaseService.wipe_table('cards')
 
 
 i = 0
@@ -49,7 +49,7 @@ for set in sets:
     print(f"{Fore.BLUE}" + progress(i, len(sets)) + f"Synchronizing {Fore.YELLOW}" + set + f"{Fore.BLUE}.")
     for card in data[set]["cards"]:
         TranslatePeon = formatter_peon.FormatterPeon(card)
-        DbCardPeon.add_card(
+        DatabaseService.add_card(
             TranslatePeon.format_name(),
             TranslatePeon.format_names(),
             TranslatePeon.format_mana_cost(),
@@ -59,4 +59,4 @@ for set in sets:
             TranslatePeon.format_color_identity()
         )
 
-DbCardPeon.close_connections()
+DatabaseService.close_connections()

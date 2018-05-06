@@ -1,11 +1,10 @@
 import pymysql
 import database.identity
-from colorama import Fore
-from colorama import Style
+
+from writer_service import Writer
 
 
-class DbCardPeon(object):
-
+class DatabaseService(object):
     def __init__(self):
         try:
             self.conn = pymysql.connect(host=database.identity.host,
@@ -14,20 +13,20 @@ class DbCardPeon(object):
                                         db=database.identity.db)
             self.cur = self.conn.cursor()
         except pymysql.err.DatabaseError as e:
-            print(f"{Fore.LIGHTRED_EX}Critical error connecting to database: \n" + str(e))
+            Writer.error("Critical error connecting to database", e)
             exit()
         else:
-            print(f"{Fore.BLUE}Connected to database.{Style.RESET_ALL}")
+            Writer.action("Connected to database.")
 
-    def reset_table(self, tableName):
+    def wipe_table(self, table_name):
         try:
-            self.cur.execute("TRUNCATE TABLE `" + tableName + "`;")
+            self.cur.execute("TRUNCATE TABLE `" + table_name + "`;")
             self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
         except pymysql.err.DatabaseError as e:
-            print(f"{Fore.LIGHTRED_EX}Critical error working with database: \n" + str(e))
+            Writer.error("Critical error working with database:", e)
             exit()
         else:
-            print(f"{Fore.BLUE}Table {Fore.YELLOW}`" + tableName + f"`{Fore.BLUE} has been wiped.{Style.RESET_ALL}")
+            Writer.action_with_highlight("Table `", table_name, "` has been wiped.")
 
     def close_connections(self):
         try:
@@ -35,10 +34,10 @@ class DbCardPeon(object):
             self.cur.close()
             self.conn.close()
         except pymysql.err.DatabaseError as e:
-            print(f"{Fore.LIGHTRED_EX}Critical error finalizing database changes: \n" + str(e))
+            Writer.error("Critical error finalizing database changes:", e)
             exit()
         else:
-            print(f"{Fore.BLUE}Database changes finalized.{Style.RESET_ALL}")
+            Writer.action("Database changes finalized.")
 
     def add_card(self, name, names, manaCost, cmc, set, colors, colorIdentity):
         self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity) VALUES (" +
