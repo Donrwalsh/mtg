@@ -46,17 +46,6 @@ class JsonPeon:
         return field, max_length, max_value
 
     def report_longest_values(self, sets):
-        fields = ['name', 'names', 'manaCost', 'cmc']
+        fields = ['name', 'names', 'manaCost', 'cmc', ]
         for field in fields[::-1]:
             print(self.longest_value(sets, field))
-
-    def multi_value_translate(self, array):
-        result = "'"
-        i = 0
-        for item in array:
-            i += 1
-            result += item.replace("'", "''")
-            if i < len(array):
-                result += "//"
-        result += "'"
-        return result

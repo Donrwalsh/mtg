@@ -3,6 +3,7 @@
 import pymysql
 import source_data.json_peon
 import database.db_card_peon
+from pprint import pprint
 
 JsonPeon = source_data.json_peon.JsonPeon('source_data')
 DbCardPeon = database.db_card_peon.DbCardPeon()
@@ -21,11 +22,18 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
         'DGM', 'MMA', 'M14', 'V13', 'DDL', 'THS', 'C13', 'BNG', 'DDM', 'JOU', 'MD1', 'CNS', 'VMA', 'M15', 'V14',
         'DDN', 'KTK', 'C14', 'DD3_GVL', 'DD3_DVD', 'DD3_EVG', 'DD3_JVC', 'FRF_UGIN', 'FRF', 'DDO', 'DTK', 'TPR', 'MM2',
         'ORI', 'V15', 'DDP', 'EXP', 'BFZ', 'C15', 'OGW', 'DDQ', 'W16', 'SOI', 'EMA', 'EMN', 'V16', 'CN2', 'DDR', 'KLD',
-        'MPS', 'C16', 'PCA', 'AER', ]
+        'MPS', 'C16', 'PCA', 'AER', 'MM3', 'DDS', 'AKH', 'MPS_AKH', 'C17', 'XLN', 'DDT', 'IMA', 'UST', 'RIX', 'A25',
+        'DDU', 'DOM'  ]
 
 max_length = 0
 
-JsonPeon.report_longest_values(sets)
+
+for item in data["LEA"]:
+    if item is not "cards":
+        pprint(data["LEA"][item])
+
+
+# JsonPeon.report_longest_values(sets)
 
 #
 #
