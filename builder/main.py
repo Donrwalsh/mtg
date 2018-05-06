@@ -54,7 +54,9 @@ for set in sets:
             TranslatePeon.format_names(),
             TranslatePeon.format_mana_cost(),
             TranslatePeon.format_cmc(),
-            "'" + set + "'"
+            "'" + set + "'",
+            TranslatePeon.format_colors(),
+            TranslatePeon.format_color_identity()
         )
 
 DbCardPeon.close_connections()
