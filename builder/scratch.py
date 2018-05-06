@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import pymysql
+import random
+import sys
+from colorama import Fore
+from colorama import Style
 import source_data.json_peon
 import database.db_card_peon
 from pprint import pprint
@@ -25,12 +28,64 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
         'MPS', 'C16', 'PCA', 'AER', 'MM3', 'DDS', 'AKH', 'MPS_AKH', 'C17', 'XLN', 'DDT', 'IMA', 'UST', 'RIX', 'A25',
         'DDU', 'DOM'  ]
 
-max_length = 0
+while True:
+    set_roll = random.randint(0, len(sets)-1)
+    random_set = sets[set_roll]
+    card_roll = random.randint(0, len(data[random_set]['cards'])-1)
+    random_card = data[random_set]['cards'][card_roll]
+    print(f"{Fore.WHITE}name     {Fore.YELLOW}" + random_card["name"])
+    random_card.pop('name', None)
+    if "names" in random_card:
+        i = 0
+        sys.stdout.write(f"{Fore.WHITE}names    ")
+        for item in random_card['names']:
+            i += 1
+            sys.stdout.write(f"{Fore.YELLOW}" + item)
+            if i < len(random_card['names']):
+                sys.stdout.write('//')
+            else:
+                sys.stdout.write('\n')
+        random_card.pop('names', None)
+    if "manaCost" in random_card:
+        print(f"{Fore.WHITE}manaCost {Fore.YELLOW}" + random_card["manaCost"])
+        random_card.pop('manaCost')
+    else:
+        print(f"{Fore.WHITE}manaCost {Fore.YELLOW}null")
+    if "cmc" in random_card:
+        print(f"{Fore.WHITE}cmc      {Fore.YELLOW}" + str(random_card["cmc"]))
+        random_card.pop("cmc")
+    else:
+        print(f"{Fore.WHITE}cmc      {Fore.YELLOW}null")
+    print(f"{Fore.WHITE}set      {Fore.YELLOW}" + random_set)
+    if "colors" in random_card:
+        i = 0
+        sys.stdout.write(f"{Fore.WHITE}colors   ")
+        for item in random_card['colors']:
+            i += 1
+            sys.stdout.write(f"{Fore.YELLOW}" + item)
+            if i < len(random_card['colors']):
+                sys.stdout.write(', ')
+            else:
+                sys.stdout.write('\n')
+        random_card.pop('colors', None)
+    else:
+        print(f"{Fore.WHITE}colors   {Fore.YELLOW}null")
+    print(random_card)
+    print(f"{Fore.LIGHTWHITE_EX}----------------------------------------------------------------------------------")
 
 
-for item in data["LEA"]:
-    if item is not "cards":
-        pprint(data["LEA"][item])
+# for x in range(10):
+#   print(random.randint(1,101))
+
+
+
+
+
+
+#
+# for item in data["LEA"]:
+#     if item is not "cards":
+#         pprint(data["LEA"][item])
 
 
 # JsonPeon.report_longest_values(sets)
