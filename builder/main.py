@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import source_data.json_peon
+import source.json_service
 import database.database_service
 
 from colorama import Fore
@@ -9,7 +9,7 @@ from colorama import Style
 # Fore.CYAN for informational notices only
 # Fore.BLUE for actions being taken
 # Fore.YELLOW for calling out individual items
-import formatter_peon
+import card_formatter
 
 
 def progress(current, total):
@@ -35,12 +35,12 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 
 
 # The JSON peon works with data from MTGJson
-JsonPeon = source_data.json_peon.JsonPeon('source_data')
-data = JsonPeon.import_data()
+JsonService = source.json_service.JsonService('source')
+data = JsonService.import_data()
 
 # The Database Peon works with our local database
-DatabaseService = database.database_service.DatabaseService()
-DatabaseService.wipe_table('cards')
+Database = database.database_service.DatabaseService()
+Database.wipe_table('cards')
 
 
 i = 0
@@ -48,15 +48,15 @@ for set in sets:
     i += 1
     print(f"{Fore.BLUE}" + progress(i, len(sets)) + f"Synchronizing {Fore.YELLOW}" + set + f"{Fore.BLUE}.")
     for card in data[set]["cards"]:
-        TranslatePeon = formatter_peon.FormatterPeon(card)
-        DatabaseService.add_card(
-            TranslatePeon.format_name(),
-            TranslatePeon.format_names(),
-            TranslatePeon.format_mana_cost(),
-            TranslatePeon.format_cmc(),
+        TranslatePeon = card_formatter.CardFormatter(card)
+        Database.add_card(
+            TranslatePeon.name_format(),
+            TranslatePeon.names_format(),
+            TranslatePeon.mana_cost_format(),
+            TranslatePeon.cmc_format(),
             "'" + set + "'",
-            TranslatePeon.format_colors(),
-            TranslatePeon.format_color_identity()
+            TranslatePeon.colors_format(),
+            TranslatePeon.color_identity_format()
         )
 
-DatabaseService.close_connections()
+Database.close_connections()

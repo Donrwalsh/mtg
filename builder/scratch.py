@@ -4,11 +4,11 @@ import random
 import sys
 from colorama import Fore
 from colorama import Style
-import source_data.json_peon
+import source.json_service
 import database.database_service
 from pprint import pprint
 
-JsonPeon = source_data.json_peon.JsonPeon('source_data')
+JsonPeon = source.json_service.JsonService('source')
 DbCardPeon = database.database_service.DatabaseService()
 
 data = JsonPeon.import_data()
@@ -120,10 +120,10 @@ while True:
 
 #
 #
-# for set in source_data:
+# for set in source:
 #     print(set)
 
 # for set in sets:
-#     for card in source_data[set]["cards"]:
+#     for card in source[set]["cards"]:
 #         print(card['name'])
 

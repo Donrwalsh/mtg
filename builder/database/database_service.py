@@ -39,7 +39,7 @@ class DatabaseService(object):
         else:
             Writer.action("Database changes finalized.")
 
-    def add_card(self, name, names, manaCost, cmc, set, colors, colorIdentity):
+    def add_card(self, name, names, mana_cost, cmc, set, colors, color_identity):
         self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity) VALUES (" +
-                         name + ", " + names + ", " + manaCost + ", " + str(cmc) + ", " +
-                         set + ", " + colors + ", " + colorIdentity + ");")
+                         name + ", " + names + ", " + mana_cost + ", " + str(cmc) + ", " +
+                         set + ", " + colors + ", " + color_identity + ");")

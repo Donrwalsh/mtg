@@ -1,14 +1,15 @@
+from writer_service import Writer
 
 
-class FormatterPeon:
+class CardFormatter:
 
     def __init__(self, card):
         self.card = card
 
-    def format_name(self):
+    def name_format(self):
         return "'" + self.card['name'].replace("'", "''") + "'"
 
-    def format_names(self):
+    def names_format(self):
         if "names" in self.card:
             result = "'"
             i = 0
@@ -20,33 +21,33 @@ class FormatterPeon:
             result += "'"
             return result
         else:
-            return self.format_name()
+            return self.name_format()
 
-    def format_mana_cost(self):
+    def mana_cost_format(self):
         if "manaCost" in self.card:
             return "'" + self.card['manaCost'] + "'"
         else:
             return "null"
 
-    def format_cmc(self):
+    def cmc_format(self):
         if "cmc" in self.card:
             return self.card["cmc"]
         else:
             return "null"
 
-    def format_colors(self):
+    def colors_format(self):
         if "colors" in self.card:
-            return self.color_translate(self.card['colors'])
+            return self.translate_color(self.card['colors'])
         else:
             return "'Colorless'"
 
-    def format_color_identity(self):
+    def color_identity_format(self):
         if "colorIdentity" in self.card:
-            return self.color_translate(self.card['colorIdentity'])
+            return self.translate_color(self.card['colorIdentity'])
         else:
             return "'Colorless'"
 
-    def color_translate(self, colorArray):
+    def translate_color(self, colorArray):
         if len(colorArray) == 1:
             if len(colorArray[0]) == 1:
                 if colorArray == ['W']:
@@ -83,8 +84,8 @@ class FormatterPeon:
             elif colorArray == ['Blue', 'Green'] or sorted(colorArray) == ['G', 'U']:
                 return "'Simic'"
             else:
-                print(colorArray)
-                return "'potato'"
+                Writer.error_card("Unable to format color on card:", self.card)
+                exit()
         elif len(colorArray) == 3:
             if colorArray == ['White', 'Blue', 'Green'] or sorted(colorArray) == ['G', 'U', 'W']:
                 return "'Bant'"
@@ -107,8 +108,8 @@ class FormatterPeon:
             elif colorArray == ['White', 'Black', 'Green'] or sorted(colorArray) == ['B', 'G', 'W']:
                 return "'Abzan'"
             else:
-                print(colorArray)
-                return "'potato'"
+                Writer.error_card("Unable to format color on card:", self.card)
+                exit()
         elif len(colorArray) == 4:
             if colorArray == ['Blue', 'Black', 'Red', 'Green'] or sorted(colorArray) == ['B', 'G', 'R', 'U']:
                 return "'Glint-Eye'"
@@ -121,7 +122,7 @@ class FormatterPeon:
             elif colorArray == ['White', 'Blue', 'Black', 'Red'] or sorted(colorArray) == ['B', 'R', 'U', 'W']:
                 return "'Yore'"
             else:
-                print(colorArray)
-                return "'potato'"
+                Writer.error_card("Unable to format color on card:", self.card)
+                exit()
         elif len(colorArray) == 5:
             return "'5Color'"
