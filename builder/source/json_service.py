@@ -5,6 +5,7 @@ import json
 import os
 
 from writer_service import Writer
+import card_formatter
 
 
 class JsonService:
@@ -32,24 +33,63 @@ class JsonService:
         return data
 
     def longest_value(self, sets, field):
-        max_length = 0
-        max_value = ""
+        db_max_length = 0
+        db_max_value = ""
+        console_max_length = 0
+        console_max_value = ""
         data = self.import_data()
         for set in sets:
             for card in data[set]['cards']:
-                if field in card:
-                    if field == "names":
-                        value = self.multi_value_translate(card[field])
-                        if len(value) > max_length:
-                            max_length = len(value)
-                            max_value = value
-                    else:
-                        if len(str(card[field])) > max_length:
-                            max_length = len(str(card[field]))
-                            max_value = card[field]
-        return field, max_length, max_value
+                Formatter = card_formatter.CardFormatter(card)
+                db_value = Formatter.db[field]
+                console_value = Formatter.console[field]
+                if len(str(db_value)) > db_max_length:
+                    db_max_value = db_value
+                    db_max_length = len(str(db_value))
+                if len(str(console_value)) > console_max_length:
+                    console_max_value = console_value
+                    console_max_length = len(str(console_value))
+        return {'c_value': str(console_max_value),
+                'c_length': console_max_length,
+                'd_value': str(db_max_value),
+                'd_length': db_max_length}
 
     def report_longest_values(self, sets):
+        field_length = 8
+        type_length = 8
+        max_length = 5
         fields = ['name', 'names', 'manaCost', 'cmc']
-        for field in fields[::-1]:
-            print(self.longest_value(sets, field))
+
+        Writer.note("+------------------------+")
+        Writer.note("|" + Writer.pad_both("Measure Report", 24) + "|")
+        Writer.note("+------------------------+")
+
+        Writer.note_stub("|")
+        Writer.highlight_stub(Writer.pad_both("FIELD", field_length + 1))
+        Writer.note_stub("|")
+        Writer.highlight_stub(Writer.pad_both("TYPE", type_length + 1))
+        Writer.note_stub("|")
+        Writer.highlight_stub(Writer.pad_both("MAX", max_length))
+        Writer.note_with_highlight("| ", "VALUE", "")
+        for field in fields:
+            values = self.longest_value(sets, field)
+            Writer.note_stub("|")
+            Writer.highlight_stub(Writer.pad_left(field, field_length))
+            Writer.note_stub(" |")
+            Writer.highlight_stub(Writer.pad_left("db", type_length))
+            Writer.note_stub(" |")
+            Writer.highlight_stub(Writer.pad_both(str(values['d_length']), max_length))
+            Writer.note_with_highlight("| ", values['d_value'], "")
+
+            Writer.note_stub("|")
+            Writer.highlight_stub(Writer.pad_left("", field_length))
+            Writer.note_stub(" |")
+            Writer.highlight_stub(Writer.pad_both("console", type_length))
+            Writer.note_stub(" |")
+            Writer.highlight_stub(Writer.pad_both(str(values['c_length']), max_length))
+            Writer.note_with_highlight("| ", values['c_value'], "")
+
+            # print(values)
+        # fields = ['name', 'names', 'manaCost', 'cmc']
+        # for field in fields[::-1]:
+        #     print(self.longest_value(sets, field))

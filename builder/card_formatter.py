@@ -5,6 +5,18 @@ class CardFormatter:
 
     def __init__(self, card):
         self.card = card
+        self.db = {
+            'name': self.name_for_db(),
+            'names': self.names_for_db(),
+            'manaCost': self.mana_cost_for_db(),
+            'cmc': self.cmc_for_db()
+        }
+        self.console = {
+            'name': self.name_for_console(),
+            'names': self.names_for_console(),
+            'manaCost': self.mana_cost_for_console(),
+            'cmc': self.cmc_for_console()
+        }
 
     def name_for_db(self):
         return "'" + self.card['name'].replace("'", "''") + "'"

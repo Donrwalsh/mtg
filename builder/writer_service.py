@@ -30,6 +30,14 @@ class Writer:
         sys.stdout.write(f"{Fore.CYAN}" + message + "\n")
 
     @classmethod
+    def note_stub(cls, message):
+        sys.stdout.write(f"{Fore.CYAN}" + message)
+
+    @classmethod
+    def highlight_stub(cls, message):
+        sys.stdout.write(f"{Fore.YELLOW}" + message)
+
+    @classmethod
     def note_with_highlight(cls, message1, highlight, message2):
         sys.stdout.write(f"{Fore.CYAN}" + message1 +
                          f"{Fore.YELLOW}" + highlight +
@@ -46,6 +54,23 @@ class Writer:
         result = title
         while len(result) < length:
             result += " "
+        return result
+
+    @classmethod
+    def pad_left(cls, msg, length):
+        result = (length - len(msg)) * " "
+        result += msg
+        return result
+
+    @classmethod
+    def pad_both(cls, msg, length):
+        pad = int((length - len(msg))/2)
+        if pad + pad + len(msg) == length:
+            result = " " * pad
+        else:
+            result = " " * (pad+1)
+        result += msg
+        result += " " * pad
         return result
 
     @classmethod

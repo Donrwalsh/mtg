@@ -84,15 +84,15 @@ class DatabaseService(object):
         for set in sets:
             i += 1
             for card in data[set]["cards"]:
-                Translator = card_formatter.CardFormatter(card)
+                Formatter = card_formatter.CardFormatter(card)
                 self.add_card(
-                    Translator.name_for_db(),
-                    Translator.names_for_db(),
-                    Translator.mana_cost_for_db(),
-                    Translator.cmc_for_db(),
+                    Formatter.name_for_db(),
+                    Formatter.names_for_db(),
+                    Formatter.mana_cost_for_db(),
+                    Formatter.cmc_for_db(),
                     "'" + set + "'",
-                    Translator.colors_for_db(),
-                    Translator.color_identity_for_db()
+                    Formatter.colors_for_db(),
+                    Formatter.color_identity_for_db()
                 )
             Writer.action_with_highlight(Writer.progress(i, len(sets)) + "Synchronized ", set, ".")
         self.close_connections()

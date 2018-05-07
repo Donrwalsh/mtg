@@ -23,6 +23,7 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 parser = argparse.ArgumentParser()
 parser.add_argument("--build", help="destroy, then build the database", action="store_true")
 parser.add_argument("--random", help="display a random card in the console", action="store_true")
+parser.add_argument("--measure", help="find longest value in all current fields from json", action="store_true")
 args = parser.parse_args()
 
 JsonService = source.json_service.JsonService('source')
@@ -39,5 +40,8 @@ if args.random:
     card_roll = random.randint(0, len(data[random_set]['cards'])-1)
     random_card = data[random_set]['cards'][card_roll]
     Writer.display_card(random_card, random_set)
+
+if args.measure:
+    JsonService.report_longest_values(sets)
 
 Database.close_connections()
