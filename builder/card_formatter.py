@@ -94,7 +94,7 @@ class CardFormatter:
         result = ""
         if "colorIdentity" in self.card:
             for color_identity in self.card['colorIdentity']:
-                if self.card['colors'].index(color_identity) == 0:
+                if self.card['colorIdentity'].index(color_identity) == 0:
                     result += "['"
                 result += color_identity
                 if self.card['colorIdentity'].index(color_identity) == len(self.card['colorIdentity']) - 1:

@@ -6,6 +6,11 @@ import card_formatter
 
 class Writer:
 
+    # Fore.LIGHTRED_EX for errors
+    # Fore.CYAN for informational notices only
+    # Fore.BLUE for actions being taken
+    # Fore.YELLOW for calling out individual items
+
     @classmethod
     def error(cls, message, error):
         sys.stdout.write(f"{Fore.LIGHTRED_EX}" + message + "\n" + str(error))
@@ -25,6 +30,12 @@ class Writer:
         sys.stdout.write(f"{Fore.CYAN}" + message + "\n")
 
     @classmethod
+    def note_with_highlight(cls, message1, highlight, message2):
+        sys.stdout.write(f"{Fore.CYAN}" + message1 +
+                         f"{Fore.YELLOW}" + highlight +
+                         f"{Fore.CYAN}" + message2 + "\n")
+
+    @classmethod
     def action_with_highlight(cls, message1, highlight, message2):
         sys.stdout.write(f"{Fore.BLUE}" + message1 +
                          f"{Fore.YELLOW}" + highlight +
@@ -36,6 +47,11 @@ class Writer:
         while len(result) < length:
             result += " "
         return result
+
+    @classmethod
+    def progress(cls, current, total):
+        bars = int((current / total) * 10)
+        return "[" + bars * "-" + (10 - bars) * " " + "]"
 
     @classmethod
     def display_card(cls, card, set):
