@@ -1,11 +1,15 @@
-#Builder
+# Builder
 
 This python script destroys and recreates the database using [MTGJson](https://mtgjson.com/) as the data source.  
 
-##In Progress
-* Writer service display_cards has only been started. Needs conditionals
+## In Progress
+For each new field into the database:
+* Writer service's display_card needs an update
+    * Alongside this, the card_formatter needs an update for db & console
+* database_service add_card needs to account for the new field
+* The loop that currently exists in main needs to account for the field.
 
-##TODOs
+## TODOs
 * Database export needs to be included
     * Maybe an output or some kind of report for longest values by field
 * Complete cards table import

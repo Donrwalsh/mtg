@@ -31,25 +31,25 @@ class JsonService:
             data = json.load(data_file)
         return data
 
-    # def longest_value(self, sets, field):
-    #     max_length = 0
-    #     max_value = ""
-    #     data = self.import_data()
-    #     for set in sets:
-    #         for card in data[set]['cards']:
-    #             if field in card:
-    #                 if field == "names":
-    #                     value = self.multi_value_translate(card[field])
-    #                     if len(value) > max_length:
-    #                         max_length = len(value)
-    #                         max_value = value
-    #                 else:
-    #                     if len(str(card[field])) > max_length:
-    #                         max_length = len(str(card[field]))
-    #                         max_value = card[field]
-    #     return field, max_length, max_value
-    #
-    # def report_longest_values(self, sets):
-    #     fields = ['name', 'names', 'manaCost', 'cmc']
-    #     for field in fields[::-1]:
-    #         print(self.longest_value(sets, field))
+    def longest_value(self, sets, field):
+        max_length = 0
+        max_value = ""
+        data = self.import_data()
+        for set in sets:
+            for card in data[set]['cards']:
+                if field in card:
+                    if field == "names":
+                        value = self.multi_value_translate(card[field])
+                        if len(value) > max_length:
+                            max_length = len(value)
+                            max_value = value
+                    else:
+                        if len(str(card[field])) > max_length:
+                            max_length = len(str(card[field]))
+                            max_value = card[field]
+        return field, max_length, max_value
+
+    def report_longest_values(self, sets):
+        fields = ['name', 'names', 'manaCost', 'cmc']
+        for field in fields[::-1]:
+            print(self.longest_value(sets, field))

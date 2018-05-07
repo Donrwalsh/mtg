@@ -1,6 +1,8 @@
 import sys
 from colorama import Fore
 
+import card_formatter
+
 
 class Writer:
 
@@ -29,15 +31,41 @@ class Writer:
                          f"{Fore.BLUE}" + message2 + "\n")
 
     @classmethod
-    def pad_title(cls, title, length):
+    def pad_right(cls, title, length):
         result = title
         while len(result) < length:
             result += " "
         return result
 
-    # @classmethod
-    # def display_card(cls, card):
-    #     sys.stdout.write(f"{Fore.WHITE}" + cls.pad_title("name", 12))
-    #     sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_title(card['name'], 33))
-    #     sys.stdout.write(f"{Fore.WHITE}" + cls.pad_title("names", 12))
-    #     sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_title(card['names'], 33))
+    @classmethod
+    def display_card(cls, card, set):
+        Formatter = card_formatter.CardFormatter(card)
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("name", 12))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.name_for_console(), 33))
+        if "names" in card:
+            sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("names", 10))
+            sys.stdout.write(f"{Fore.YELLOW}" + Formatter.names_for_console())
+        sys.stdout.write('\n')
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("manaCost", 12))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.mana_cost_for_console(), 33))
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("cmc", 6))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.cmc_for_console(), 4))
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("set", 15))
+        sys.stdout.write(f"{Fore.YELLOW}" + set + "\n")
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colors", 12))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.colors_for_console(), 43))
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colorIdentity", 15))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.color_identity_for_console(), 21) + "\n")
+
+        card.pop('name', None)
+        if "names" in card:
+            card.pop('names', None)
+        if "manaCost" in card:
+            card.pop('manaCost', None)
+        if "cmc" in card:
+            card.pop('cmc', None)
+        if "colors" in card:
+            card.pop('colors', None)
+        if "colorIdentity" in card:
+            card.pop('colorIdentity', None)
+        print(card)

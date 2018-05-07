@@ -50,13 +50,13 @@ for set in sets:
     for card in data[set]["cards"]:
         TranslatePeon = card_formatter.CardFormatter(card)
         Database.add_card(
-            TranslatePeon.name_format(),
-            TranslatePeon.names_format(),
-            TranslatePeon.mana_cost_format(),
-            TranslatePeon.cmc_format(),
+            TranslatePeon.name_for_db(),
+            TranslatePeon.names_for_db(),
+            TranslatePeon.mana_cost_for_db(),
+            TranslatePeon.cmc_for_db(),
             "'" + set + "'",
-            TranslatePeon.colors_format(),
-            TranslatePeon.color_identity_format()
+            TranslatePeon.colors_for_db(),
+            TranslatePeon.color_identity_for_db()
         )
 
 Database.close_connections()
