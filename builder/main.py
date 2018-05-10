@@ -32,6 +32,7 @@ Database = database.database_service.DatabaseService()
 
 # Conditional that decides whether or not to establish the database connection
 if args.build:
+    # Database.create_table('names')
     Database.build_database(sets, data)
 
 if args.random:
