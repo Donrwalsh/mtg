@@ -33,6 +33,7 @@ class DatabaseService(object):
                                   `colors` varchar(45) NOT NULL,
                                   `colorIdentity` varchar(45) NOT NULL,
                                   `type` varchar(50) NOT NULL,
+                                  `supertypes` varchar(15) DEFAULT NULL,
                                   PRIMARY KEY (`id`)
                                   ) ENGINE=InnoDB AUTO_INCREMENT=32677 DEFAULT CHARSET=utf8;""")
             except pymysql.err.DatabaseError as e:
@@ -64,10 +65,10 @@ class DatabaseService(object):
         else:
             Writer.action("Database connection closed.")
 
-    def add_card(self, name, names, mana_cost, cmc, set, colors, color_identity, type):
-        self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity, type) VALUES (" +
-                         name + ", " + names + ", " + mana_cost + ", " + cmc + ", " +
-                         set + ", " + colors + ", " + color_identity + ", " + type + ");")
+    def add_card(self, name, names, mana_cost, cmc, set, colors, color_identity, type, supertypes):
+        self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
+                         name + ", " + names + ", " + mana_cost + ", " + cmc + ", " + set + ", " + colors + ", " +
+                         color_identity + ", " + type + ", " + supertypes + ");")
 
     def check_table_exists(self, table_name):
         self.cur.execute("""SELECT COUNT(*) FROM information_schema.tables WHERE table_name =  '""" + table_name + """'""" )
@@ -95,7 +96,8 @@ class DatabaseService(object):
                     "'" + set + "'",
                     Formatter.colors_for_db(),
                     Formatter.color_identity_for_db(),
-                    Formatter.type_for_db()
+                    Formatter.type_for_db(),
+                    Formatter.supertypes_for_db()
                 )
             Writer.action_with_highlight(Writer.progress(i, len(sets)) + "Synchronized ", set, ".")
         self.close_connections()

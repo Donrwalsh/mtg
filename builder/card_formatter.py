@@ -12,7 +12,8 @@ class CardFormatter:
             'cmc': self.cmc_for_db(),
             'colors': self.colors_for_db(),
             'colorIdentity': self.color_identity_for_db(),
-            'type': self.type_for_db()
+            'type': self.type_for_db(),
+            'supertypes': self.supertypes_for_db()
         }
         self.console = {
             'name': self.name_for_console(),
@@ -21,7 +22,8 @@ class CardFormatter:
             'cmc': self.cmc_for_console(),
             'colors': self.colors_for_console(),
             'colorIdentity': self.color_identity_for_console(),
-            'type': self.type_for_console()
+            'type': self.type_for_console(),
+            'supertypes': self.supertypes_for_console()
         }
 
     def name_for_db(self):
@@ -128,6 +130,34 @@ class CardFormatter:
 
     def type_for_console(self):
         return self.card['type']
+
+    def supertypes_for_console(self):
+        result = ""
+        if "supertypes" in self.card:
+            for super_type in self.card['supertypes']:
+                if self.card['supertypes'].index(super_type) == 0:
+                    result += "['"
+                result += super_type
+                if self.card['supertypes'].index(super_type) == len(self.card['supertypes']) - 1:
+                    result += "']"
+                else:
+                    result += "', '"
+        else:
+            result = "[]"
+        return result
+
+    def supertypes_for_db(self):
+        result = "'"
+        if "supertypes" in self.card:
+            for super_type in self.card['supertypes']:
+                result += super_type
+                if self.card['supertypes'].index(super_type) != len(self.card['supertypes']) - 1:
+                    result += ", "
+                else:
+                    result += "'"
+            return result
+        else:
+            return "null"
 
     def translate_color(self, colorArray):
         if len(colorArray) == 1:

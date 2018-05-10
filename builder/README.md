@@ -2,7 +2,10 @@
 
 This python script destroys and recreates the database using [MTGJson](https://mtgjson.com/) as the data source.  
 
-## In Progress
+## Do next
+Normalize stuff, start with color, colorIdentity and then move on to types/supertypes/subtypes
+
+## Adding new fields
 For each new field into the database:
 * Writer service's display_card needs an update
     * Alongside this, the card_formatter needs an update for db & console

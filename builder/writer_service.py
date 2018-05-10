@@ -99,6 +99,9 @@ class Writer:
         sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.color_identity_for_console(), 21) + "\n")
         sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("type", 12))
         sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.type_for_console(), 50) + "\n")
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("supertypes", 12))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.supertypes_for_console(), 33))
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("types", 6) + "\n")
 
         card.pop('name', None)
         if "names" in card:
@@ -113,4 +116,6 @@ class Writer:
             card.pop('colorIdentity', None)
         if "type" in card:
             card.pop('type', None)
+        if "supertypes" in card:
+            card.pop('supertypes', None)
         print(card)
