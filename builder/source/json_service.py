@@ -55,14 +55,12 @@ class JsonService:
                 'd_length': db_max_length}
 
     def report_longest_values(self, sets):
-        field_length = 8
+        field_length = 14
         type_length = 8
         max_length = 5
-        fields = ['name', 'names', 'manaCost', 'cmc']
+        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type']
 
-        Writer.note("+------------------------+")
-        Writer.note("|" + Writer.pad_both("Measure Report", 24) + "|")
-        Writer.note("+------------------------+")
+        Writer.note("=============== Measure Report ===============")
 
         Writer.note_stub("|")
         Writer.highlight_stub(Writer.pad_both("FIELD", field_length + 1))

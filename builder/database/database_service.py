@@ -32,6 +32,7 @@ class DatabaseService(object):
                                   `set` varchar(10) NOT NULL,
                                   `colors` varchar(45) NOT NULL,
                                   `colorIdentity` varchar(45) NOT NULL,
+                                  `type` varchar(50) NOT NULL,
                                   PRIMARY KEY (`id`)
                                   ) ENGINE=InnoDB AUTO_INCREMENT=32677 DEFAULT CHARSET=utf8;""")
             except pymysql.err.DatabaseError as e:
@@ -63,10 +64,10 @@ class DatabaseService(object):
         else:
             Writer.action("Database connection closed.")
 
-    def add_card(self, name, names, mana_cost, cmc, set, colors, color_identity):
-        self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity) VALUES (" +
-                         name + ", " + names + ", " + mana_cost + ", " + str(cmc) + ", " +
-                         set + ", " + colors + ", " + color_identity + ");")
+    def add_card(self, name, names, mana_cost, cmc, set, colors, color_identity, type):
+        self.cur.execute("INSERT INTO cards (name, names, manaCost, cmc, `set`, colors, colorIdentity, type) VALUES (" +
+                         name + ", " + names + ", " + mana_cost + ", " + cmc + ", " +
+                         set + ", " + colors + ", " + color_identity + ", " + type + ");")
 
     def check_table_exists(self, table_name):
         self.cur.execute("""SELECT COUNT(*) FROM information_schema.tables WHERE table_name =  '""" + table_name + """'""" )
@@ -85,6 +86,7 @@ class DatabaseService(object):
             i += 1
             for card in data[set]["cards"]:
                 Formatter = card_formatter.CardFormatter(card)
+                # Writer.display_card(card, set)
                 self.add_card(
                     Formatter.name_for_db(),
                     Formatter.names_for_db(),
@@ -92,7 +94,8 @@ class DatabaseService(object):
                     Formatter.cmc_for_db(),
                     "'" + set + "'",
                     Formatter.colors_for_db(),
-                    Formatter.color_identity_for_db()
+                    Formatter.color_identity_for_db(),
+                    Formatter.type_for_db()
                 )
             Writer.action_with_highlight(Writer.progress(i, len(sets)) + "Synchronized ", set, ".")
         self.close_connections()

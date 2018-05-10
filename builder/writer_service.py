@@ -97,6 +97,8 @@ class Writer:
         sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.colors_for_console(), 43))
         sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colorIdentity", 15))
         sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.color_identity_for_console(), 21) + "\n")
+        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("type", 12))
+        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.type_for_console(), 50) + "\n")
 
         card.pop('name', None)
         if "names" in card:
@@ -109,4 +111,6 @@ class Writer:
             card.pop('colors', None)
         if "colorIdentity" in card:
             card.pop('colorIdentity', None)
+        if "type" in card:
+            card.pop('type', None)
         print(card)

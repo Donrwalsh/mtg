@@ -44,4 +44,4 @@ if args.random:
 if args.measure:
     JsonService.report_longest_values(sets)
 
-Database.close_connections()
+# Database.close_connections()

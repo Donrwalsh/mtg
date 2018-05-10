@@ -9,13 +9,19 @@ class CardFormatter:
             'name': self.name_for_db(),
             'names': self.names_for_db(),
             'manaCost': self.mana_cost_for_db(),
-            'cmc': self.cmc_for_db()
+            'cmc': self.cmc_for_db(),
+            'colors': self.colors_for_db(),
+            'colorIdentity': self.color_identity_for_db(),
+            'type': self.type_for_db()
         }
         self.console = {
             'name': self.name_for_console(),
             'names': self.names_for_console(),
             'manaCost': self.mana_cost_for_console(),
-            'cmc': self.cmc_for_console()
+            'cmc': self.cmc_for_console(),
+            'colors': self.colors_for_console(),
+            'colorIdentity': self.color_identity_for_console(),
+            'type': self.type_for_console()
         }
 
     def name_for_db(self):
@@ -65,7 +71,7 @@ class CardFormatter:
 
     def cmc_for_db(self):
         if "cmc" in self.card:
-            return self.card["cmc"]
+            return str(self.card["cmc"])
         else:
             return "null"
 
@@ -116,6 +122,12 @@ class CardFormatter:
         else:
             result = "['C']"
         return result
+
+    def type_for_db(self):
+        return "'" + (self.card['type'].replace("’", "''")).replace("—", "-") + "'"
+
+    def type_for_console(self):
+        return self.card['type']
 
     def translate_color(self, colorArray):
         if len(colorArray) == 1:
