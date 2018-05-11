@@ -5,7 +5,7 @@ from writer_service import Writer
 
 
 class DatabaseService(object):
-    tables = ('cards', 'names')
+    tables = ('cards', 'names', 'sets')
 
     def __init__(self):
         try:
@@ -25,10 +25,10 @@ class DatabaseService(object):
             try:
                 self.cur.execute("""CREATE TABLE `cards` (
                                   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, 
-                                  `name` varchar(33) NOT NULL,
+                                  `name` varchar(150) NOT NULL,
                                   `manaCost` varchar(45) DEFAULT NULL,
                                   `cmc` int(11) DEFAULT NULL,
-                                  `set` varchar(10) NOT NULL,
+                                  `set` int(11) NOT NULL,
                                   `colors` varchar(45) NOT NULL,
                                   `colorIdentity` varchar(45) NOT NULL,
                                   `type` varchar(50) NOT NULL,
@@ -38,23 +38,34 @@ class DatabaseService(object):
             except pymysql.err.DatabaseError as e:
                 Writer.error("Critical error working with database:", e)
                 exit()
-            else:
-                self.conn.commit()
-                Writer.action_with_highlight("Table `", table_name, "` has been created.")
         elif table_name == "names":
             try:
                 self.cur.execute("""CREATE TABLE `names` (
                                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                                   `card` int(11) unsigned NOT NULL,
-                                  `name` VARCHAR(33) NOT NULL,
+                                  `name` VARCHAR(50) NOT NULL,
                                   PRIMARY KEY (`id`)
                                   ) ENGINE=InnoDB DEFAULT CHARSET=utf8; """)
             except pymysql.err.DatabaseError as e:
                 Writer.error("Critical error working with database:", e)
                 exit()
-            else:
-                self.conn.commit()
-                Writer.action_with_highlight("Table `", table_name, "` has been created.")
+        elif table_name == "sets":
+            try:
+                self.cur.execute("""CREATE TABLE `sets` (
+                                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                  `name` VARCHAR(50) NOT NULL,
+                                  `code` VARCHAR(10) NOT NULL,
+                                  `releaseDate` DATE NOT NULL,
+                                  `border` VARCHAR(50) NOT NULL,
+                                  `type` VARCHAR(50) NOT NULL,
+                                  `onlineOnly` TINYINT(1) NOT NULL,
+                                  PRIMARY KEY (`id`)
+                                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
+            except pymysql.err.DatabaseError as e:
+                Writer.error("Critical error working with database:", e)
+                exit()
+        self.conn.commit()
+        Writer.action_with_highlight("Table `", table_name, "` has been created.")
 
     def drop_table(self, table_name):
         try:
@@ -66,16 +77,16 @@ class DatabaseService(object):
             self.conn.commit()
             Writer.action_with_highlight("Table `", table_name, "` has been dropped.")
 
-    def wipe_table(self, table_name):
-        try:
-            self.cur.execute("TRUNCATE TABLE `" + table_name + "`;")
-            self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
-        except pymysql.err.DatabaseError as e:
-            Writer.error("Critical error working with database:", e)
-            exit()
-        else:
-            self.conn.commit()
-            Writer.action_with_highlight("Table `", table_name, "` has been wiped.")
+    # def wipe_table(self, table_name):
+    #     try:
+    #         self.cur.execute("TRUNCATE TABLE `" + table_name + "`;")
+    #         self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
+    #     except pymysql.err.DatabaseError as e:
+    #         Writer.error("Critical error working with database:", e)
+    #         exit()
+    #     else:
+    #         self.conn.commit()
+    #         Writer.action_with_highlight("Table `", table_name, "` has been wiped.")
 
     def close_connections(self):
         try:
@@ -88,7 +99,15 @@ class DatabaseService(object):
         else:
             Writer.action("Database connection closed.")
 
+    def add_set(self, name, code, releaseDate, border, type, onlineOnly):
+        self.cur.execute("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES (" +
+                         name + ", " + code + ", " + releaseDate + ", " + border + ", " + type + ", " +
+                         onlineOnly + ");")
+
     def add_card(self, name, mana_cost, cmc, set, colors, color_identity, type, supertypes):
+        print("INSERT INTO cards (name, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
+                         name + ", " + mana_cost + ", " + cmc + ", " + set + ", " + colors + ", " +
+                         color_identity + ", " + type + ", " + supertypes + ");")
         self.cur.execute("INSERT INTO cards (name, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
                          name + ", " + mana_cost + ", " + cmc + ", " + set + ", " + colors + ", " +
                          color_identity + ", " + type + ", " + supertypes + ");")
@@ -99,27 +118,31 @@ class DatabaseService(object):
             return True
         return False
 
-    def build_database(self, sets, data):
+    def build_database(self, sets, data, set_data):
         for table in self.tables:
             self.drop_table(table)
             self.create_table(table)
-            # if self.check_table_exists(table):
-            #     self.wipe_table(table)
-            # else:
-            #     self.create_table(table)
         i = 0
         j = 0
-        for set in sets:
+        for set in set_data:
             i += 1
-            for card in data[set]["cards"]:
+            self.add_set(
+                "'" + (set['name'].replace("'", "''")).replace("—", "-") + "'",
+                "'" + set['code'] + "'",
+                "'" + set['releaseDate'] + "'",
+                "'" + set['border'] + "'",
+                "'" + set['type'] + "'",
+                '1' if set['onlineOnly'] is True else '0'
+            )
+            for card in data[set['code']]["cards"]:
                 j += 1
                 Formatter = card_formatter.CardFormatter(card)
-                # Writer.display_card(card, set)
+                # print(Formatter.db)
                 self.add_card(
                     Formatter.name_for_db(),
                     Formatter.mana_cost_for_db(),
                     Formatter.cmc_for_db(),
-                    "'" + set + "'",
+                    str(i),
                     Formatter.colors_for_db(),
                     Formatter.color_identity_for_db(),
                     Formatter.type_for_db(),
@@ -131,5 +154,5 @@ class DatabaseService(object):
                         self.cur.execute(
                             "INSERT INTO names (card, name) VALUES (" +
                             str(j) + ", '" + name.replace("'", "''") + "');")
-            Writer.action_with_highlight(Writer.progress(i, len(sets)) + "Synchronized ", set, ".")
+            Writer.action_with_highlight(Writer.progress(i, 223) + "Synchronized ", set['name'], ".")
         self.close_connections()

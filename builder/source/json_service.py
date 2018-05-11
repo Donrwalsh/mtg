@@ -32,6 +32,23 @@ class JsonService:
             data = json.load(data_file)
         return data
 
+    # Leaves out block and booster
+    def create_set_data(self, data):
+        output = []
+        for set in data:
+            print(data[set]['name'])
+            output.append({
+                'name': data[set]['name'],
+                'code': data[set]['code'],
+                'releaseDate': data[set]['releaseDate'],
+                'border': data[set]['border'],
+                'type': data[set]['type'],
+                'onlineOnly': data[set]['onlineOnly'] if 'onlineOnly' in data[set] else "false"
+            })
+        output.sort(key=lambda x: x['releaseDate'])
+        return output
+
+
     def longest_value(self, sets, field):
         db_max_length = 0
         db_max_value = ""

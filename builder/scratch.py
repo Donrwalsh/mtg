@@ -8,6 +8,7 @@ import source.json_service
 import database.database_service
 from pprint import pprint
 from writer_service import Writer
+import pprint
 
 JsonPeon = source.json_service.JsonService('source')
 DbCardPeon = database.database_service.DatabaseService()
@@ -32,19 +33,34 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 # JsonPeon.report_longest_values(sets)
 # exit()
 
+pprint.pprint(JsonPeon.create_set_data(data))
+# d_output = {}
+# output = []
+#
+# for set in data:
+#
+#     d_addition = {'set': set, 'date': data[set]['releaseDate']}
+#     # addition = (set, data[set]['releaseDate'])
+#     output.append(d_addition)
+#
+#
+#
+# pprint.pprint(output)
 
 
 
-j = 0
-while True:
-    j += 1
-    set_roll = random.randint(0, len(sets)-1)
-    random_set = sets[set_roll]
-    card_roll = random.randint(0, len(data[random_set]['cards'])-1)
-    random_card = data[random_set]['cards'][card_roll]
-    if "colorIdentity" not in random_card:
-        Writer.display_card(random_card, random_set)
-        exit()
+
+#
+# j = 0
+# while True:
+#     j += 1
+#     set_roll = random.randint(0, len(sets)-1)
+#     random_set = sets[set_roll]
+#     card_roll = random.randint(0, len(data[random_set]['cards'])-1)
+#     random_card = data[random_set]['cards'][card_roll]
+#     if "colorIdentity" not in random_card:
+#         Writer.display_card(random_card, random_set)
+#         exit()
     # if "manaCost" in random_card:
     #     print(f"{Fore.WHITE}manaCost {Fore.YELLOW}" + random_card["manaCost"])
     #     random_card.pop('manaCost')

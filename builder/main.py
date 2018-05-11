@@ -22,18 +22,19 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--build", help="destroy, then build the database", action="store_true")
-parser.add_argument("--random", help="display a random card in the console", action="store_true")
 parser.add_argument("--measure", help="find longest value in all current fields from json", action="store_true")
+parser.add_argument("--random", help="display a random card in the console", action="store_true")
 args = parser.parse_args()
 
 JsonService = source.json_service.JsonService('source')
 data = JsonService.import_data()
+set_data = JsonService.create_set_data(data)
 Database = database.database_service.DatabaseService()
 
 # Conditional that decides whether or not to establish the database connection
 if args.build:
     # Database.create_table('names')
-    Database.build_database(sets, data)
+    Database.build_database(sets, data, set_data)
 
 if args.random:
     set_roll = random.randint(0, len(sets)-1)
