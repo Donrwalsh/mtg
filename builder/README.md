@@ -2,26 +2,14 @@
 
 This python script destroys and recreates the database using [MTGJson](https://mtgjson.com/) as the data source.  
 
-## Do next
-Normalize stuff, start with color, colorIdentity and then move on to types/supertypes/subtypes
-
-## Adding new fields
-For each new field into the database:
-* Writer service's display_card needs an update
-    * Alongside this, the card_formatter needs an update for db & console
-* database_service add_card needs to account for the new field
-* The loop that currently exists in main needs to account for the field.
+## Working on
+Moving any existing values on cards that need to be normalized onto their own tables. Continuing down the path of grabbing other fields to include into the ecosystem
+Continue to update database service's add_card function to no longer rely on Formatter.
+Formatter probably needs to just only work with the console.
 
 ## TODOs
-* Database export needs to be included
-    * Maybe an output or some kind of report for longest values by field
-* Complete cards table import
-    * Itemize remaining fields and all the places they are being added.
-* Sets table
-* Color table
-    * Some sort of hierarchy? Thinking about colorIdentity cascading down.
-* Currently pulling in 32k cards with sporadic manual verification.
-    * Some sort of automated sanity check
-    * Error handling anticipating changes to cards in new sets.
-        * New fields? Alert when something is there that is not expected
-        * I'm thinking an error class makes a lot of sense.
+* Stuff to do after the obvious first step of completing the database is complete:
+* Clean up unnecessary items that existed prior to normalization.
+* It'd be really nice to have some data validation.
+* Additionally I'd like an entity relation diagram of some kind of the underlying database.
+* 223 magic number for the progress bar needs to come from json

@@ -5,7 +5,14 @@ from writer_service import Writer
 
 
 class DatabaseService(object):
-    tables = ('cards', 'names', 'sets', 'colors')
+    tables = ('cards', 'names', 'sets', 'colors', 'color_identities')
+    colorMap = {
+        "W": "White",
+        "U": "Blue",
+        "B": "Black",
+        "R": "Red",
+        "G": "Green",
+    }
 
     def __init__(self):
         try:
@@ -35,7 +42,6 @@ class DatabaseService(object):
                                       `manaCost` varchar(45) DEFAULT NULL,
                                       `cmc` int(11) DEFAULT NULL,
                                       `set` int(11) NOT NULL,
-                                      `colorIdentity` varchar(45) NOT NULL,
                                       `type` varchar(50) NOT NULL,
                                       `supertypes` varchar(15) DEFAULT NULL,
                                       PRIMARY KEY (`id`)
@@ -65,6 +71,13 @@ class DatabaseService(object):
                                       `color` VARCHAR(10) NOT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
+        elif table_name == "color_identities":
+            self.query("""CREATE TABLE `color_identities` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `card_id` int(11) unsigned NOT NULL,
+                                      `color` VARCHAR(10) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
         Writer.action_with_highlight("Table `", table_name, "` has been created.")
 
     def drop_table(self, table_name):
@@ -89,23 +102,21 @@ class DatabaseService(object):
             Writer.action("Database connection closed.")
 
     def add_set(self, set):
-        onlineOnly = '1' if set['onlineOnly'] is True else '0'
         self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
-                         "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
-                         "'" + set['code'] + "', " +
-                         "'" + set['releaseDate'] + "', " +
-                         "'" + set['border'] + "', " +
-                         "'" + set['type'] + "', " +
-                         onlineOnly + ");")
+                    "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
+                    "'" + set['code'] + "', " +
+                    "'" + set['releaseDate'] + "', " +
+                    "'" + set['border'] + "', " +
+                    "'" + set['type'] + "', " +
+                    ('1' if set['onlineOnly'] is True else '0') + ");")
 
     def add_card(self, card, set):
         Formatter = card_formatter.CardFormatter(card)
-        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, colorIdentity, type, supertypes) VALUES (" +
-                         Formatter.name_for_db() + ", " +
-                         Formatter.mana_cost_for_db() + ", " +
-                         Formatter.cmc_for_db() + ", " +
-                         set + ", " +
-                         Formatter.color_identity_for_db() + ", " +
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, type, supertypes) VALUES (" +
+                    "'" + card['name'].replace("'", "''") + "', " +
+                    ("'" + card['manaCost'] + "'" if "manaCost" in card else "null") + ", " +
+                    (str(card["cmc"]) if "cmc" in card else "null") + ", " +
+                    set + ", " +
                          Formatter.type_for_db() + ", " +
                          Formatter.supertypes_for_db() +
                          ");")
@@ -135,6 +146,15 @@ class DatabaseService(object):
                 else:
                     self.query(
                         "INSERT INTO colors (card_id, color) VALUES (" +
+                        str(j) + ", 'Colorless');")
+                if 'colorIdentity' in card:
+                    for color in card['colorIdentity']:
+                        self.query(
+                            "INSERT INTO color_identities (card_id, color) VALUES (" +
+                            str(j) + ", '" + self.colorMap[color] + "');")
+                else:
+                    self.query(
+                        "INSERT INTO color_identities (card_id, color) VALUES (" +
                         str(j) + ", 'Colorless');")
             Writer.action_with_highlight(Writer.progress(i, 223) + "Synchronized ", set['name'], ".")
         self.close_connections()
