@@ -12,6 +12,10 @@ class Writer:
     # Fore.YELLOW for calling out individual items
 
     @classmethod
+    def SQL_error(cls, message, error, query):
+        sys.stdout.write(f"{Fore.LIGHTRED_EX}" + message + "\n" + str(error) + "\n" + str(query))
+
+    @classmethod
     def error(cls, message, error):
         sys.stdout.write(f"{Fore.LIGHTRED_EX}" + message + "\n" + str(error))
 

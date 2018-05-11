@@ -20,50 +20,45 @@ class DatabaseService(object):
         else:
             Writer.action("Connected to database.")
 
+    def query(self, query):
+        try:
+            self.cur.execute(query)
+        except pymysql.err.DatabaseError as e:
+            Writer.SQL_error("Critical error working with database:", e, query)
+            exit()
+
     def create_table(self, table_name):
-        if table_name == "cards":
-            try:
-                self.cur.execute("""CREATE TABLE `cards` (
-                                  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, 
-                                  `name` varchar(150) NOT NULL,
-                                  `manaCost` varchar(45) DEFAULT NULL,
-                                  `cmc` int(11) DEFAULT NULL,
-                                  `set` int(11) NOT NULL,
-                                  `colors` varchar(45) NOT NULL,
-                                  `colorIdentity` varchar(45) NOT NULL,
-                                  `type` varchar(50) NOT NULL,
-                                  `supertypes` varchar(15) DEFAULT NULL,
-                                  PRIMARY KEY (`id`)
-                                  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;""")
-            except pymysql.err.DatabaseError as e:
-                Writer.error("Critical error working with database:", e)
-                exit()
+        if table_name == 'cards':
+            self.query("""CREATE TABLE `cards` (
+                                      `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, 
+                                      `name` varchar(150) NOT NULL,
+                                      `manaCost` varchar(45) DEFAULT NULL,
+                                      `cmc` int(11) DEFAULT NULL,
+                                      `set` int(11) NOT NULL,
+                                      `colors` varchar(45) NOT NULL,
+                                      `colorIdentity` varchar(45) NOT NULL,
+                                      `type` varchar(50) NOT NULL,
+                                      `supertypes` varchar(15) DEFAULT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;""")
         elif table_name == "names":
-            try:
-                self.cur.execute("""CREATE TABLE `names` (
-                                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                                  `card` int(11) unsigned NOT NULL,
-                                  `name` VARCHAR(50) NOT NULL,
-                                  PRIMARY KEY (`id`)
-                                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8; """)
-            except pymysql.err.DatabaseError as e:
-                Writer.error("Critical error working with database:", e)
-                exit()
+            self.query("""CREATE TABLE `names` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `card` int(11) unsigned NOT NULL,
+                                      `name` VARCHAR(50) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8; """)
         elif table_name == "sets":
-            try:
-                self.cur.execute("""CREATE TABLE `sets` (
-                                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                                  `name` VARCHAR(50) NOT NULL,
-                                  `code` VARCHAR(10) NOT NULL,
-                                  `releaseDate` DATE NOT NULL,
-                                  `border` VARCHAR(50) NOT NULL,
-                                  `type` VARCHAR(50) NOT NULL,
-                                  `onlineOnly` TINYINT(1) NOT NULL,
-                                  PRIMARY KEY (`id`)
-                                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
-            except pymysql.err.DatabaseError as e:
-                Writer.error("Critical error working with database:", e)
-                exit()
+            self.query("""CREATE TABLE `sets` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `name` VARCHAR(50) NOT NULL,
+                                      `code` VARCHAR(10) NOT NULL,
+                                      `releaseDate` DATE NOT NULL,
+                                      `border` VARCHAR(50) NOT NULL,
+                                      `type` VARCHAR(50) NOT NULL,
+                                      `onlineOnly` TINYINT(1) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
         self.conn.commit()
         Writer.action_with_highlight("Table `", table_name, "` has been created.")
 
@@ -77,17 +72,6 @@ class DatabaseService(object):
             self.conn.commit()
             Writer.action_with_highlight("Table `", table_name, "` has been dropped.")
 
-    # def wipe_table(self, table_name):
-    #     try:
-    #         self.cur.execute("TRUNCATE TABLE `" + table_name + "`;")
-    #         self.cur.execute("ALTER TABLE `cards` AUTO_INCREMENT = 1;")
-    #     except pymysql.err.DatabaseError as e:
-    #         Writer.error("Critical error working with database:", e)
-    #         exit()
-    #     else:
-    #         self.conn.commit()
-    #         Writer.action_with_highlight("Table `", table_name, "` has been wiped.")
-
     def close_connections(self):
         try:
             self.conn.commit()
@@ -99,24 +83,28 @@ class DatabaseService(object):
         else:
             Writer.action("Database connection closed.")
 
-    def add_set(self, name, code, releaseDate, border, type, onlineOnly):
-        self.cur.execute("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES (" +
-                         name + ", " + code + ", " + releaseDate + ", " + border + ", " + type + ", " +
+    def add_set(self, set):
+        onlineOnly = '1' if set['onlineOnly'] is True else '0'
+        self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
+                         "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
+                         "'" + set['code'] + "', " +
+                         "'" + set['releaseDate'] + "', " +
+                         "'" + set['border'] + "', " +
+                         "'" + set['type'] + "', " +
                          onlineOnly + ");")
 
-    def add_card(self, name, mana_cost, cmc, set, colors, color_identity, type, supertypes):
-        print("INSERT INTO cards (name, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
-                         name + ", " + mana_cost + ", " + cmc + ", " + set + ", " + colors + ", " +
-                         color_identity + ", " + type + ", " + supertypes + ");")
-        self.cur.execute("INSERT INTO cards (name, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
-                         name + ", " + mana_cost + ", " + cmc + ", " + set + ", " + colors + ", " +
-                         color_identity + ", " + type + ", " + supertypes + ");")
-
-    def check_table_exists(self, table_name):
-        self.cur.execute("""SELECT COUNT(*) FROM information_schema.tables WHERE table_name =  '""" + table_name + """'""" )
-        if self.cur.fetchone()[0] == 1:
-            return True
-        return False
+    def add_card(self, card, set):
+        Formatter = card_formatter.CardFormatter(card)
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, colors, colorIdentity, type, supertypes) VALUES (" +
+                         Formatter.name_for_db() + ", " +
+                         Formatter.mana_cost_for_db() + ", " +
+                         Formatter.cmc_for_db() + ", " +
+                         set + ", " +
+                         Formatter.colors_for_db() + ", " +
+                         Formatter.color_identity_for_db() + ", " +
+                         Formatter.type_for_db() + ", " +
+                         Formatter.supertypes_for_db() +
+                         ");")
 
     def build_database(self, sets, data, set_data):
         for table in self.tables:
@@ -126,28 +114,10 @@ class DatabaseService(object):
         j = 0
         for set in set_data:
             i += 1
-            self.add_set(
-                "'" + (set['name'].replace("'", "''")).replace("—", "-") + "'",
-                "'" + set['code'] + "'",
-                "'" + set['releaseDate'] + "'",
-                "'" + set['border'] + "'",
-                "'" + set['type'] + "'",
-                '1' if set['onlineOnly'] is True else '0'
-            )
+            self.add_set(set)
             for card in data[set['code']]["cards"]:
                 j += 1
-                Formatter = card_formatter.CardFormatter(card)
-                # print(Formatter.db)
-                self.add_card(
-                    Formatter.name_for_db(),
-                    Formatter.mana_cost_for_db(),
-                    Formatter.cmc_for_db(),
-                    str(i),
-                    Formatter.colors_for_db(),
-                    Formatter.color_identity_for_db(),
-                    Formatter.type_for_db(),
-                    Formatter.supertypes_for_db()
-                )
+                self.add_card(card, str(j))
                 if 'names' in card:
                     for name in card['names']:
                         # self.add_names(i, name)
