@@ -74,7 +74,8 @@ class JsonService:
         field_length = 14
         type_length = 8
         max_length = 5
-        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes', 'types', 'subtypes']
+        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes', 'types',
+                  'subtypes', 'rarity']
 
         Writer.note("=============== Measure Report ===============")
 

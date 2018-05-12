@@ -15,7 +15,8 @@ class CardFormatter:
             'type': self.type_for_db(),
             'supertypes': self.supertypes_for_db(),
             'types': self.types_for_db(),
-            'subtypes': self.subtypes_for_db()
+            'subtypes': self.subtypes_for_db(),
+            'rarity': self.rarity_for_db()
         }
         self.console = {
             'name': self.name_for_console(),
@@ -27,7 +28,8 @@ class CardFormatter:
             'type': self.type_for_console(),
             'supertypes': self.supertypes_for_console(),
             'types': self.types_for_console(),
-            'subtypes': self.subtypes_for_console()
+            'subtypes': self.subtypes_for_console(),
+            'rarity': self.rarity_for_console()
         }
 
     def name_for_db(self):
@@ -218,6 +220,12 @@ class CardFormatter:
             return result
         else:
             return "null"
+
+    def rarity_for_db(self):
+        return "'" + self.card['rarity'] + "'"
+
+    def rarity_for_console(self):
+        return self.card['rarity']
 
     def translate_color(self, colorArray):
         if len(colorArray) == 1:

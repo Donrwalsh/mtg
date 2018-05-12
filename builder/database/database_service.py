@@ -44,6 +44,7 @@ class DatabaseService(object):
                                       `manaCost` varchar(45) DEFAULT NULL,
                                       `cmc` int(11) DEFAULT NULL,
                                       `set` int(11) NOT NULL,
+                                      `rarity` varchar(15) NOT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;""")
         elif table_name == "names":
@@ -133,11 +134,12 @@ class DatabaseService(object):
 
     def add_card(self, card, set):
         Formatter = card_formatter.CardFormatter(card)
-        self.query("INSERT INTO cards (name, manaCost, cmc, `set`) VALUES (" +
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity) VALUES (" +
                     "'" + card['name'].replace("'", "''") + "', " +
                     ("'" + card['manaCost'] + "'" if "manaCost" in card else "null") + ", " +
                     (str(card["cmc"]) if "cmc" in card else "null") + ", " +
-                    set +
+                    set + ", " +
+                    "'" + card['rarity'] + "'" +
                     ");")
 
     def build_database(self, data_cards, data_sets):

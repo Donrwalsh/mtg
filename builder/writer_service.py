@@ -85,32 +85,38 @@ class Writer:
     @classmethod
     def display_card(cls, card, set):
         Formatter = card_formatter.CardFormatter(card)
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("name", 12))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.name_for_console(), 33))
-        if "names" in card:
-            sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("names", 10))
-            sys.stdout.write(f"{Fore.YELLOW}" + Formatter.names_for_console())
-        sys.stdout.write('\n')
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("manaCost", 12))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.mana_cost_for_console(), 33))
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("cmc", 6))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.cmc_for_console(), 4))
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("set", 15))
-        sys.stdout.write(f"{Fore.YELLOW}" + set + "\n")
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colors", 12))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.colors_for_console(), 43))
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colorIdentity", 15))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.color_identity_for_console(), 21) + "\n")
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("type", 12))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.type_for_console(), 50) + "\n")
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("supertypes", 12))
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.supertypes_for_console(), 33))
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("types", 6) + "")
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.types_for_console(), 33) + "\n")
-        sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("subtypes", 12) + "")
-        sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.subtypes_for_console(), 33) + "\n")
+        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes', 'types',
+                  'subtypes', 'rarity']
+        for field in fields:
+            sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right(field, 14))
+            sys.stdout.write(f"{Fore.YELLOW}" + Formatter.console[field] + "\n")
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("name", 12))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.name_for_console(), 33))
+        # if "names" in card:
+        #     sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("names", 10))
+        #     sys.stdout.write(f"{Fore.YELLOW}" + Formatter.names_for_console())
+        # sys.stdout.write('\n')
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("manaCost", 12))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.mana_cost_for_console(), 33))
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("cmc", 6))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.cmc_for_console(), 4))
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("set", 15))
+        # sys.stdout.write(f"{Fore.YELLOW}" + set + "\n")
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colors", 12))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.colors_for_console(), 43))
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("colorIdentity", 15))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.color_identity_for_console(), 21) + "\n")
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("type", 12))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.type_for_console(), 50) + "\n")
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("supertypes", 12))
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.supertypes_for_console(), 33))
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("types", 6) + "")
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.types_for_console(), 33) + "\n")
+        # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("subtypes", 12) + "")
+        # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.subtypes_for_console(), 33) + "\n")
 
         card.pop('name', None)
+        card.pop('rarity', None)
         if "names" in card:
             card.pop('names', None)
         if "manaCost" in card:
@@ -129,4 +135,6 @@ class Writer:
             card.pop('types', None)
         if "subtypes" in card:
             card.pop('subtypes', None)
+
+
         print(card)

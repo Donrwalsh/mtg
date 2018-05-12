@@ -33,7 +33,16 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 # JsonPeon.report_longest_values(sets)
 # exit()
 
-pprint.pprint(JsonPeon.create_set_data(data))
+rarities = []
+
+for set in data:
+    for card in data[set]['cards']:
+        if card['rarity'] not in rarities:
+            rarities.append(card['rarity'])
+
+pprint.pprint(rarities)
+
+# pprint.pprint(JsonPeon.create_set_data(data))
 # d_output = {}
 # output = []
 #

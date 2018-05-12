@@ -16,3 +16,4 @@ Formatter probably needs to just only work with the console.
 * Additionally I'd like an entity relation diagram of some kind of the underlying database.
 * 223 magic number for the progress bar needs to come from json
 * All console work might need to be revisited thanks to omitted sets while building initially.
+* Could make a version of displaycard that shows what it would look like if each field were maximized
