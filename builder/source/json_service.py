@@ -36,7 +36,6 @@ class JsonService:
     def create_set_data(self, data):
         output = []
         for set in data:
-            print(data[set]['name'])
             output.append({
                 'name': data[set]['name'],
                 'code': data[set]['code'],
@@ -75,7 +74,7 @@ class JsonService:
         field_length = 14
         type_length = 8
         max_length = 5
-        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes']
+        fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes', 'types', 'subtypes']
 
         Writer.note("=============== Measure Report ===============")
 

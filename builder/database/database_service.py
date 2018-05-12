@@ -5,7 +5,7 @@ from writer_service import Writer
 
 
 class DatabaseService(object):
-    tables = ('cards', 'names', 'sets', 'colors', 'color_identities')
+    tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes')
     colorMap = {
         "W": "White",
         "U": "Blue",
@@ -32,6 +32,8 @@ class DatabaseService(object):
             self.cur.execute(query)
         except pymysql.err.DatabaseError as e:
             Writer.SQL_error("Critical error working with database:", e, query)
+        except UnicodeEncodeError as e:
+            Writer.SQL_error("Critical encoding error:", e, query)
             exit()
 
     def create_table(self, table_name):
@@ -42,8 +44,6 @@ class DatabaseService(object):
                                       `manaCost` varchar(45) DEFAULT NULL,
                                       `cmc` int(11) DEFAULT NULL,
                                       `set` int(11) NOT NULL,
-                                      `type` varchar(50) NOT NULL,
-                                      `supertypes` varchar(15) DEFAULT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;""")
         elif table_name == "names":
@@ -76,6 +76,27 @@ class DatabaseService(object):
                                       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                                       `card_id` int(11) unsigned NOT NULL,
                                       `color` VARCHAR(10) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
+        elif table_name == "supertypes":
+            self.query("""CREATE TABLE `supertypes` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `card_id` int(11) unsigned NOT NULL,
+                                      `supertype` VARCHAR(10) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
+        elif table_name == "types":
+            self.query("""CREATE TABLE `types` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `card_id` int(11) unsigned NOT NULL,
+                                      `type` VARCHAR(20) NOT NULL,
+                                      PRIMARY KEY (`id`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
+        elif table_name == "subtypes":
+            self.query("""CREATE TABLE `subtypes` (
+                                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                      `card_id` int(11) unsigned NOT NULL,
+                                      `subtype` VARCHAR(25) NOT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
         Writer.action_with_highlight("Table `", table_name, "` has been created.")
@@ -112,24 +133,22 @@ class DatabaseService(object):
 
     def add_card(self, card, set):
         Formatter = card_formatter.CardFormatter(card)
-        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, type, supertypes) VALUES (" +
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`) VALUES (" +
                     "'" + card['name'].replace("'", "''") + "', " +
                     ("'" + card['manaCost'] + "'" if "manaCost" in card else "null") + ", " +
                     (str(card["cmc"]) if "cmc" in card else "null") + ", " +
-                    set + ", " +
-                         Formatter.type_for_db() + ", " +
-                         Formatter.supertypes_for_db() +
-                         ");")
+                    set +
+                    ");")
 
-    def build_database(self, sets, data, set_data):
+    def build_database(self, data_cards, data_sets):
         for table in self.tables:
             self.drop_table(table)
             self.create_table(table)
         i, j = 0, 0
-        for set in set_data:
+        for set in data_sets:
             i += 1
             self.add_set(set)
-            for card in data[set['code']]["cards"]:
+            for card in data_cards[set['code']]["cards"]:
                 j += 1
                 self.add_card(card, str(i))
                 if 'names' in card:
@@ -156,5 +175,20 @@ class DatabaseService(object):
                     self.query(
                         "INSERT INTO color_identities (card_id, color) VALUES (" +
                         str(j) + ", 'Colorless');")
+                if 'supertypes' in card:
+                    for supertype in card['supertypes']:
+                        self.query(
+                            "INSERT INTO supertypes (card_id, supertype) VALUES (" +
+                            str(j) + ", '" + supertype + "');")
+                if 'types' in card:
+                    for type in card['types']:
+                        self.query(
+                            "INSERT INTO types (card_id, type) VALUES(" +
+                            str(j) + ", '" + type + "');")
+                if 'subtypes' in card:
+                    for subtype in card['subtypes']:
+                        self.query(
+                            "INSERT INTO subtypes (card_id, subtype) VALUES(" +
+                            str(j) + ", '" + subtype.replace("’", "''") + "');")
             Writer.action_with_highlight(Writer.progress(i, 223) + "Synchronized ", set['name'], ".")
         self.close_connections()
