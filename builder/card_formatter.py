@@ -16,7 +16,10 @@ class CardFormatter:
             'supertypes': self.supertypes_for_db(),
             'types': self.types_for_db(),
             'subtypes': self.subtypes_for_db(),
-            'rarity': self.rarity_for_db()
+            'rarity': self.rarity_for_db(),
+            'text': self.text_for_db(),
+            'flavor': self.flavor_for_db(),
+            'artist': self.artist_for_db()
         }
         self.console = {
             'name': self.name_for_console(),
@@ -29,7 +32,10 @@ class CardFormatter:
             'supertypes': self.supertypes_for_console(),
             'types': self.types_for_console(),
             'subtypes': self.subtypes_for_console(),
-            'rarity': self.rarity_for_console()
+            'rarity': self.rarity_for_console(),
+            'text': self.text_for_console(),
+            'flavor': self.flavor_for_console(),
+            'artist': self.artist_for_console()
         }
 
     def name_for_db(self):
@@ -226,6 +232,36 @@ class CardFormatter:
 
     def rarity_for_console(self):
         return self.card['rarity']
+
+    def text_for_db(self):
+        if "text" in self.card:
+            return "'" + self.card['text'].replace("'", "''") + "'"
+        else:
+            return "null"
+
+    def text_for_console(self):
+        if "text" in self.card:
+            return self.card['text']
+        else:
+            return "null"
+
+    def flavor_for_db(self):
+        if "flavor" in self.card:
+            return "'" + self.card['flavor'].replace("'", "''") + "'"
+        else:
+            return "null"
+
+    def flavor_for_console(self):
+        if "flavor" in self.card:
+            return self.card['flavor']
+        else:
+            return "null"
+
+    def artist_for_db(self):
+        return "'" + self.card['artist'].replace("'", "''") + "'"
+
+    def artist_for_console(self):
+        return self.card['artist']
 
     def translate_color(self, colorArray):
         if len(colorArray) == 1:

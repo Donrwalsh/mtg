@@ -86,10 +86,10 @@ class Writer:
     def display_card(cls, card, set):
         Formatter = card_formatter.CardFormatter(card)
         fields = ['name', 'names', 'colors', 'colorIdentity', 'manaCost', 'cmc', 'type', 'supertypes', 'types',
-                  'subtypes', 'rarity']
+                  'subtypes', 'rarity', 'text', 'flavor', 'artist']
         for field in fields:
             sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right(field, 14))
-            sys.stdout.write(f"{Fore.YELLOW}" + Formatter.console[field] + "\n")
+            sys.stdout.write(f"{Fore.YELLOW}" + Formatter.console[field].replace("\n", "\n              ") + "\n")
         # sys.stdout.write(f"{Fore.WHITE}" + cls.pad_right("name", 12))
         # sys.stdout.write(f"{Fore.YELLOW}" + cls.pad_right(Formatter.name_for_console(), 33))
         # if "names" in card:
@@ -117,6 +117,7 @@ class Writer:
 
         card.pop('name', None)
         card.pop('rarity', None)
+        card.pop('artist', None)
         if "names" in card:
             card.pop('names', None)
         if "manaCost" in card:
@@ -135,6 +136,10 @@ class Writer:
             card.pop('types', None)
         if "subtypes" in card:
             card.pop('subtypes', None)
+        if "text" in card:
+            card.pop('text', None)
+        if "flavor" in card:
+            card.pop('flavor', None)
 
 
         print(card)

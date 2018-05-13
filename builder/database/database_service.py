@@ -26,12 +26,14 @@ class DatabaseService(object):
             exit()
         else:
             Writer.action("Connected to database.")
+        self.conn.set_charset('utf8')
 
     def query(self, query):
         try:
             self.cur.execute(query)
         except pymysql.err.DatabaseError as e:
             Writer.SQL_error("Critical error working with database:", e, query)
+            exit()
         except UnicodeEncodeError as e:
             Writer.SQL_error("Critical encoding error:", e, query)
             exit()
@@ -45,6 +47,9 @@ class DatabaseService(object):
                                       `cmc` int(11) DEFAULT NULL,
                                       `set` int(11) NOT NULL,
                                       `rarity` varchar(15) NOT NULL,
+                                      `text` VARCHAR(800),
+                                      `flavor` VARCHAR(500),
+                                      `artist` VARCHAR(100),
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;""")
         elif table_name == "names":
@@ -134,12 +139,15 @@ class DatabaseService(object):
 
     def add_card(self, card, set):
         Formatter = card_formatter.CardFormatter(card)
-        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity) VALUES (" +
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist) VALUES (" +
                     "'" + card['name'].replace("'", "''") + "', " +
                     ("'" + card['manaCost'] + "'" if "manaCost" in card else "null") + ", " +
                     (str(card["cmc"]) if "cmc" in card else "null") + ", " +
                     set + ", " +
-                    "'" + card['rarity'] + "'" +
+                    "'" + card['rarity'] + "'" + ", " +
+                    ("'" + card['text'].replace("'", "''") + "'" if "text" in card else "null") + ", " +
+                    ("'" + card['flavor'].replace("'", "''") + "'" if "flavor" in card else "null") + ", " +
+                    "'" + card['artist'].replace("'", "''") + "'" +
                     ");")
 
     def build_database(self, data_cards, data_sets):
