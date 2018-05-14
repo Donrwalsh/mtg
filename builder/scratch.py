@@ -34,11 +34,14 @@ sets = ['LEA', 'LEB', 'ARN', '2ED', 'pDRC', 'ATQ', '3ED', 'LEG', 'DRK', 'FEM', '
 # exit()
 
 rarities = []
-
+j = 0
 for set in data:
     for card in data[set]['cards']:
-        if card['rarity'] not in rarities:
-            rarities.append(card['rarity'])
+        if 'timeshifted' in card:
+            print(card['timeshifted'])
+
+print(j)
+exit()
 
 pprint.pprint(rarities)
 
