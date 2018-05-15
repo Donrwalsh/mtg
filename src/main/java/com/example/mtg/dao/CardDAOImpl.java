@@ -1,6 +1,6 @@
-package com.example.mtgapi.dao;
+package com.example.mtg.dao;
 
-import com.example.mtgapi.model.Card;
+import com.example.mtg.model.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

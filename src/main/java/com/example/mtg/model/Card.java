@@ -1,4 +1,4 @@
-package com.example.mtgapi.model;
+package com.example.mtg.model;
 
 public class Card {
 
