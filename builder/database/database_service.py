@@ -47,7 +47,7 @@ class DatabaseService(object):
                                       `power` VARCHAR(10),
                                       `toughness` VARCHAR(10),
                                       `loyalty` VARCHAR(10),
-                                      `multiverseid` VARCHAR(10),
+                                      `multiverseid` int(11) unsigned,
                                       `watermark` VARCHAR(50),
                                       `border` VARCHAR(20),
                                       `layout` VARCHAR(20),
