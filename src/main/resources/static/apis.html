@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UST Flash Cards</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">UST Flash Cards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="apis.html" method="GET">APIs <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search (I do nothing)</button>
+        </form>
+    </div>
+</nav>
+<div>
+    <h1 style="text-align:center">APIs</h1>
+    <hr>
+    <div class = "container">
+        <h2>user</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Endpoint</th>
+                <th>Params</th>
+                <th style="width:18rem;max-width:18rem;">Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><button id="bUsers" type="button" class="btn btn-primary">Try</button></td>
+                <td>/v1/users</td>
+                <td><input disabled type="text" placeholder="no params"></td>
+                <td><div id ="rUsers"></div></td>
+            </tr>
+            <tr>
+                <td><button id ="bUser" type="button" class="btn btn-primary">Try</button></td>
+                <td>/v1/user</td>
+                <td>?id=<input style="width:9.5rem" id="pUser" type="text" placeholder="Long"</td>
+                <td><div id = "rUser"></div></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class ="container">
+        <h2>question</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Endpoint</th>
+                <th>Params</th>
+                <th style="width:18rem;max-width:18rem;">Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><button id="bQuestion" type="button" class="btn btn-primary">Try</button></td>
+                <td>/v1/question</td>
+                <td>?id=<input style="width:9.5rem" id="pQuestion" type="text" placeholder="Long"</td>
+                <td><div id ="rQuestion"></div></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/index.js"></script>
+</html>

@@ -141,12 +141,12 @@ class DatabaseService(object):
 
     def add_set(self, set):
         self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
-                    "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
-                    "'" + set['code'] + "', " +
-                    "'" + set['releaseDate'] + "', " +
-                    "'" + set['border'] + "', " +
-                    "'" + set['type'] + "', " +
-                    ('1' if set['onlineOnly'] is True else '0') + ");")
+                   "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
+                   "'" + set['code'] + "', " +
+                   "'" + set['releaseDate'] + "', " +
+                   "'" + set['border'] + "', " +
+                   "'" + set['type'] + "', " +
+                   ('1' if set['onlineOnly'] is True else '0') + ");")
 
     def add_card(self, card, set):
         Translator = translator_service.TranslatorService(card)
