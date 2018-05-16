@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -29,6 +30,7 @@ public class CardDAOImpl implements CardDAO {
     private static final class CardMapper implements RowMapper<Card> {
 
         public Card mapRow(ResultSet rs, int rowNum) throws SQLException {
+
 
             Card card = new Card(
                     rs.getLong("id"),
