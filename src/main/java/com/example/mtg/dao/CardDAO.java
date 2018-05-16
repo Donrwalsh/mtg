@@ -2,7 +2,9 @@ package com.example.mtg.dao;
 
 import com.example.mtg.model.Card;
 
+import java.util.List;
+
 public interface CardDAO {
-    Card getACard(Long id);
+    List<Card> getACard(Long id);
 
 }

@@ -29,49 +29,22 @@
     <h1 style="text-align:center">APIs</h1>
     <hr>
     <div class = "container">
-        <h2>user</h2>
+        <h2>cards</h2>
         <table class="table">
             <thead>
-            <tr>
-                <th></th>
-                <th>Endpoint</th>
-                <th>Params</th>
-                <th style="width:18rem;max-width:18rem;">Result</th>
-            </tr>
+                <tr>
+                    <th></th>
+                    <th>Endpoint</th>
+                    <th>Params</th>
+                    <th style="width:18rem;max-width:18rem;">Result</th>
+                </tr>
             </thead>
             <tbody>
             <tr>
-                <td><button id="bUsers" type="button" class="btn btn-primary">Try</button></td>
-                <td>/v1/users</td>
-                <td><input disabled type="text" placeholder="no params"></td>
-                <td><div id ="rUsers"></div></td>
-            </tr>
-            <tr>
-                <td><button id ="bUser" type="button" class="btn btn-primary">Try</button></td>
-                <td>/v1/user</td>
-                <td>?id=<input style="width:9.5rem" id="pUser" type="text" placeholder="Long"</td>
-                <td><div id = "rUser"></div></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class ="container">
-        <h2>question</h2>
-        <table class="table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Endpoint</th>
-                <th>Params</th>
-                <th style="width:18rem;max-width:18rem;">Result</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><button id="bQuestion" type="button" class="btn btn-primary">Try</button></td>
-                <td>/v1/question</td>
-                <td>?id=<input style="width:9.5rem" id="pQuestion" type="text" placeholder="Long"</td>
-                <td><div id ="rQuestion"></div></td>
+                <td><button id="bCard" type="button" class="btn btn-primary">Try</button></td>
+                <td>/v0/card/</td>
+                <td>?id=<input style="width:9.5rem" id="pCard" type="text" placeholder="Long"></td>
+                <td><div id ="rCard"></div></td>
             </tr>
             </tbody>
         </table>

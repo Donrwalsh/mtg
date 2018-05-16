@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Named
 public class CardDAOImpl implements CardDAO {
@@ -21,8 +22,8 @@ public class CardDAOImpl implements CardDAO {
             "SELECT id, name FROM `cards` WHERE ID = ?";
 
     @Override
-    public Card getACard(Long id) {
-        return jdbcTemplate.queryForObject(GET_CARD_BY_ID, new CardMapper(), id.toString());
+    public List<Card> getACard(Long id) {
+        return jdbcTemplate.query(GET_CARD_BY_ID, new CardMapper(), id.toString());
     }
 
     private static final class CardMapper implements RowMapper<Card> {
