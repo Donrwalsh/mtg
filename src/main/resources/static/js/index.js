@@ -33,10 +33,10 @@ $(document).ready(function () {
         });
     });
 
-    $('#bNames').click(function() {
-        var call = "/v0/names";
-        if( $('#pNames').val() ) {
-            call += "?id=" + $('#pNames').val();
+    $('#bCards').click(function() {
+        var call = "/v0/cards";
+        if( $('#pCards').val() ) {
+            call += "?name=" + $('#pCards').val();
         }
         $.ajax({
             type: "GET",
@@ -50,8 +50,8 @@ $(document).ready(function () {
                 if( resJSON == "") {
                     resJSON = "{Empty Response}";
                 }
-                $('#rNames').empty();
-                $('#rNames').append(resJSON);
+                $('#rCards').empty();
+                $('#rCards').append(resJSON);
             },
             error: function (errmsg, txtstatus) {
                 var msg = JSON.parse(errmsg.responseText).message;

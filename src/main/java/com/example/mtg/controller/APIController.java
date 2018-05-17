@@ -18,15 +18,10 @@ public class APIController {
     @Autowired
     private CardService CS;
 
-    @RequestMapping("v0/names")
-    public List<String> names(@RequestParam(value="id", defaultValue="0") String id) {
-        Long longId;
-        try {
-            longId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            longId = 0L;
-        }
-        List<String> response = ND.GetNamesByID(longId);
+    @RequestMapping("v0/cards")
+    public List<Card> cards(@RequestParam(value="name", defaultValue="") String name) {
+        String constructed_name = "%" + name + "%";
+        List<Card> response = CS.GetAllCards(constructed_name);
         return response;
     }
 

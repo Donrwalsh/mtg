@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -19,14 +18,19 @@ public class CardDAOImpl implements CardDAO {
     @Autowired
     public CardDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
+    private static final String GET_CARDS_BY_NAME =
+            "SELECT * FROM `cards` WHERE name LIKE ? LIMIT 10;";
+
     private static final String GET_CARD_BY_ID =
-            "SELECT id, name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, toughness, loyalty, " +
-                    "multiverseid, watermark, border, layout FROM `cards` WHERE ID = ?";
+            "SELECT * FROM `cards` WHERE ID = ?";
 
     @Override
     public List<Card> getACard(Long id) {
         return jdbcTemplate.query(GET_CARD_BY_ID, new CardMapper(), id.toString());
     }
+
+    @Override
+    public List<Card> getCards(String name) { return jdbcTemplate.query(GET_CARDS_BY_NAME, new CardMapper(), name); }
 
     private static final class CardMapper implements RowMapper<Card> {
 
@@ -50,7 +54,10 @@ public class CardDAOImpl implements CardDAO {
                     rs.getInt("multiverseid"),
                     rs.getString("watermark"),
                     rs.getString("border"),
-                    rs.getString("layout")
+                    rs.getString("layout"),
+                    rs.getBoolean("timeshifted"),
+                    rs.getBoolean("reserved"),
+                    rs.getBoolean("starter")
             );
 
             return card;

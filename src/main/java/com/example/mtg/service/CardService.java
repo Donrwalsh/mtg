@@ -16,17 +16,30 @@ public class CardService {
     @Autowired
     private MultiValuesDAO MVD;
 
+    private void AppendMultivalues(Card card) {
+        card.setNames(MVD.GetNamesByID(card.getId()));
+        card.setColors(MVD.GetColorsByID(card.getId()));
+        card.setColorIdentity(MVD.GetColorIdentityByID(card.getId()));
+        card.setSuperTypes(MVD.GetSuperTypesByID(card.getId()));
+        card.setTypes(MVD.GetTypesByID(card.getId()));
+        card.setSubTypes(MVD.GetSubTypesByID(card.getId()));
+        card.setVariations(MVD.GetVariationsByID(card.getId()));
+    }
+
     public List<Card> ConstructCardByID(Long id) {
 
         List<Card> response = CD.getACard(id);
         for (Card card : response) {
-            card.setNames(MVD.GetNamesByID(card.getId()));
-            card.setColors(MVD.GetColorsByID(card.getId()));
-            card.setColorIdentity(MVD.GetColorIdentityByID(card.getId()));
-            card.setSuperTypes(MVD.GetSuperTypesByID(card.getId()));
-            card.setTypes(MVD.GetTypesByID(card.getId()));
-            card.setSubTypes(MVD.GetSubTypesByID(card.getId()));
-            card.setVariations(MVD.GetVariationsByID(card.getId()));
+            AppendMultivalues(card);
+        }
+        return response;
+    }
+
+    public List<Card> GetAllCards(String name) {
+
+        List<Card> response = CD.getCards(name);
+        for (Card card : response) {
+            AppendMultivalues(card);
         }
         return response;
     }

@@ -1,12 +1,14 @@
-package com.example.mtg;
+package com.example.mtg.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.example.mtg.Helloworld;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloworldController {
+public class RoutingController {
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();

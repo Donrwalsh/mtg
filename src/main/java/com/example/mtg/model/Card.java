@@ -29,11 +29,14 @@ public class Card {
     private String watermark;
     private String border;
     private String layout;
+    private boolean timeshifted;
+    private boolean reserved;
+    private boolean starter;
 
     //Constructors ----------------------------------------------------------------------------------------------------
     public Card(Long id, String name, String manaCost, int cmc, int set, String rarity, String text, String flavor,
                 String artist, String number, String power, String toughness, String loyalty, int multiverseid,
-                String watermark, String border, String layout) {
+                String watermark, String border, String layout, boolean timeshifted, boolean reserved, boolean starter) {
         this.id = id;
         this.name = name;
         this.manaCost = manaCost;
@@ -51,6 +54,9 @@ public class Card {
         this.watermark = watermark;
         this.border = border;
         this.layout = layout;
+        this.timeshifted = timeshifted;
+        this.reserved = reserved;
+        this.starter = starter;
     }
 
     //Getters ---------------------------------------------------------------------------------------------------------
@@ -78,6 +84,9 @@ public class Card {
     public String getWatermark() { return watermark; }
     public String getBorder() { return border; }
     public String getLayout() { return layout; }
+    public boolean getTimeshifted() { return timeshifted; }
+    public boolean getReserved() { return reserved; }
+    public boolean getStarter() { return starter; }
 
     //Setters --------------------------------------------------------------------------------------------------------
     public void setNames(List<String> names) {
