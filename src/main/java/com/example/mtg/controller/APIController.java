@@ -34,8 +34,13 @@ public class APIController {
             longId = 0L;
         }
 
-        List<Card> response = CS.ConstructCardByID(longId);
-        return response;
+        if (longId == 0L) {
+            return CS.ConstructRandomCard();
+        } else {
+            return CS.ConstructCardByID(longId);
+        }
+
+//        return response;
     }
 
 }

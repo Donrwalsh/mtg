@@ -44,6 +44,15 @@ public class CardService {
         return response;
     }
 
+    public List<Card> ConstructRandomCard() {
+
+        List<Card> response = CD.getRandomCard();
+        for (Card card : response) {
+            AppendMultivalues(card);
+        }
+        return response;
+    }
+
 
 
 }

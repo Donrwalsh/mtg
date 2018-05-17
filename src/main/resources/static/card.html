@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/card.js"></script>
     <meta charset="UTF-8">
     <title>MTG Don</title>
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -29,39 +31,11 @@
     </div>
 </nav>
 <div>
-    <h1 style="text-align:center">APIs</h1>
-    <hr>
-    <div class = "container">
-        <h2>cards</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Endpoint</th>
-                    <th>Params</th>
-                    <th style="width:18rem;max-width:18rem;">Result</th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><button id="bCard" type="button" class="btn btn-primary">Try</button></td>
-                <td>/v0/card</td>
-                <td>?id=<input style="width:9.5rem" id="pCard" type="text" placeholder="Long"></td>
-                <td><div id ="rCard"></div></td>
-            </tr>
-            <tr>
-                <td><button id="bCards" type="button" class="btn btn-primary">Try</button></td>
-                <td>/v0/cards</td>
-                <td>?name=<input style="width:9.5rem" id="pCards" type="text" placeholder="String"></td>
-                <td><div id ="rCards"></div></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <h1 id="cardName" style="text-align:center;padding-top:1rem;"></h1>
+    <p id="cardID"></p>
 </div>
 
 </body>
-<script src="js/jquery-3.2.1.min.js"></script>
+
 <script src="js/bootstrap.min.js"></script>
-<script src="js/index.js"></script>
 </html>

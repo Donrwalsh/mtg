@@ -24,6 +24,9 @@ public class CardDAOImpl implements CardDAO {
     private static final String GET_CARD_BY_ID =
             "SELECT * FROM `cards` WHERE ID = ?";
 
+    private static final String GET_RANDOM_CARD =
+            "SELECT * FROM `cards` ORDER BY RAND() LIMIT 1";
+
     @Override
     public List<Card> getACard(Long id) {
         return jdbcTemplate.query(GET_CARD_BY_ID, new CardMapper(), id.toString());
@@ -31,6 +34,9 @@ public class CardDAOImpl implements CardDAO {
 
     @Override
     public List<Card> getCards(String name) { return jdbcTemplate.query(GET_CARDS_BY_NAME, new CardMapper(), name); }
+
+    @Override
+    public List<Card> getRandomCard() { return jdbcTemplate.query(GET_RANDOM_CARD, new CardMapper()); }
 
     private static final class CardMapper implements RowMapper<Card> {
 
