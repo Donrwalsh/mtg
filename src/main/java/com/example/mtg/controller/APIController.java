@@ -1,7 +1,6 @@
 package com.example.mtg.controller;
 
-import com.example.mtg.dao.CardDAO;
-import com.example.mtg.dao.NamesDAO;
+import com.example.mtg.dao.MultiValuesDAO;
 import com.example.mtg.model.Card;
 import com.example.mtg.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.List;
 public class APIController {
 
     @Autowired
-    private NamesDAO ND;
+    private MultiValuesDAO ND;
     @Autowired
     private CardService CS;
 

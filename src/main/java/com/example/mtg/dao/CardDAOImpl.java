@@ -20,7 +20,8 @@ public class CardDAOImpl implements CardDAO {
     public CardDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
     private static final String GET_CARD_BY_ID =
-            "SELECT id, name FROM `cards` WHERE ID = ?";
+            "SELECT id, name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, toughness, loyalty, " +
+                    "multiverseid, watermark, border, layout FROM `cards` WHERE ID = ?";
 
     @Override
     public List<Card> getACard(Long id) {
@@ -34,7 +35,22 @@ public class CardDAOImpl implements CardDAO {
 
             Card card = new Card(
                     rs.getLong("id"),
-                    rs.getString("name")
+                    rs.getString("name"),
+                    rs.getString("manaCost"),
+                    rs.getInt("cmc"),
+                    rs.getInt("set"),
+                    rs.getString("rarity"),
+                    rs.getString("text"),
+                    rs.getString("flavor"),
+                    rs.getString("artist"),
+                    rs.getString("number"),
+                    rs.getString("power"),
+                    rs.getString("toughness"),
+                    rs.getString("loyalty"),
+                    rs.getInt("multiverseid"),
+                    rs.getString("watermark"),
+                    rs.getString("border"),
+                    rs.getString("layout")
             );
 
             return card;
