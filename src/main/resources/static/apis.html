@@ -32,6 +32,8 @@
     <h1 style="text-align:center">APIs</h1>
     <hr>
     <div class = "container">
+        <div id="output" class="col" style="max-width:40%;float:left;"></div>
+        <div class = "col" style="max-width:60%;float:left;">
         <h2>cards</h2>
         <table class="table">
             <thead>
@@ -39,7 +41,6 @@
                     <th></th>
                     <th>Endpoint</th>
                     <th>Params</th>
-                    <th style="width:18rem;max-width:18rem;">Result</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,16 +48,15 @@
                 <td><button id="bCard" type="button" class="btn btn-primary">Try</button></td>
                 <td>/v0/card</td>
                 <td>?id=<input style="width:9.5rem" id="pCard" type="text" placeholder="Long"></td>
-                <td><div id ="rCard"></div></td>
             </tr>
             <tr>
                 <td><button id="bCards" type="button" class="btn btn-primary">Try</button></td>
                 <td>/v0/cards</td>
                 <td>?name=<input style="width:9.5rem" id="pCards" type="text" placeholder="String"></td>
-                <td><div id ="rCards"></div></td>
             </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 
