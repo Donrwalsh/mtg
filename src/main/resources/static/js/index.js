@@ -29,6 +29,11 @@ function display_card_val(field_name, type, value) {
 
 $(document).ready(function () {
 
+    $('.nav-link').click(function() {
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+    });
+
     $('#bCard').click(function() {
         var call = "/v0/card";
         if( $('#pCard').val() ) {
