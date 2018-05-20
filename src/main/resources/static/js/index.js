@@ -27,7 +27,8 @@ function display_card_val(field_name, type, value) {
     }
 }
 
-$(document).ready(function () {
+$(function () {
+    "use strict";
 
     $('.nav-link').click(function() {
         $('.nav-link').removeClass('active');
@@ -99,6 +100,7 @@ $(document).ready(function () {
             type: "GET",
             url: call,
             success: function (response) {
+                console.log(response.length);
                 var resJSON = "";
                 console.log(response)
                 $.each(response, function (i, response) {
@@ -116,6 +118,4 @@ $(document).ready(function () {
             }
         });
     });
-
-    console.log("Look at me, I'm Javascript!")
 });
