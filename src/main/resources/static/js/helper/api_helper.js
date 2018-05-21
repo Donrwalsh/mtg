@@ -1,6 +1,6 @@
-let $responseNavs = $(".nav-response");
-let $responseNavAs = $(".nav-response-a");
-let $ULofNavs = $('#tabs');
+let $outputTabLinks = $(".output-tabs").children('li').children('a');
+let $outputNavTabs = $(".output-tabs").children('li');
+let $outputResponseDivs = $(".response-output");
 
 let $bCard = $("#bCard");
 let $bCardParam1 = $("#pCard");
@@ -12,25 +12,25 @@ function display_card_val(field_name, type, value) {
         case 'string':
             return "<strong>" + field_name + "</strong>: \"" + value + "\",<br>"
         case 'multi-string':
-            var result = "<strong>" + field_name + "</strong>: [";
+            let msResult = "<strong>" + field_name + "</strong>: [";
             $.each(value, function (i, item) {
                 if (i === (value).length-1) {
-                    result += "\"" + item + "\"";
+                    msResult += "\"" + item + "\"";
                 } else {
-                    result += "\"" + item + "\",";
+                    msResult += "\"" + item + "\",";
                 }
             });
-            return result + "],<br>";
+            return msResult + "],<br>";
         case 'multi-int':
-            var result = "<strong>" + field_name + "</strong>: [";
+            let miResult = "<strong>" + field_name + "</strong>: [";
             $.each(value, function (i, item) {
                 if (i === (value).length-1) {
-                    result += item;
+                    miResult += item;
                 } else {
-                    result += "" + item + ",";
+                    miResult += "" + item + ",";
                 }
             });
-            return result + "],<br>";
+            return miResult + "],<br>";
     }
 }
 
@@ -69,17 +69,16 @@ function display_card(card) {
 }
 
 function select_response_tab(i) {
-    $responseNavAs.removeClass('active');
-    $(".nav-response-a:eq(" + i + ")").addClass('active');
-    $(".response-output").css("display", "none");
-    $(".response-output:eq(" + i + ")").css("display", "block");
+    $outputTabLinks.removeClass('active');
+    $outputTabLinks.eq(i).addClass('active');
+    $outputResponseDivs.css("display", "none");
+    $outputResponseDivs.eq(i).css("display", "block");
 }
 
 function handle_successful_response(response) {
-    console.log(response);
-    $ULofNavs.css("border-bottom-width","1px");
-    $responseNavs.css("display","none");
-    $responseNavs.each(function( i ) {
+    $('.output-navigation').css("border-bottom-width","1px");
+    $outputNavTabs.css("display","none");
+    $outputNavTabs.each(function( i ) {
         if (i < response.length) {
             this.style.display = "block";
         }

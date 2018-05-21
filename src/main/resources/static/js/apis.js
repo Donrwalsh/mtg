@@ -1,8 +1,10 @@
 $(function () {
     "use strict";
 
-    $responseNavAs.click(function() {
-        select_response_tab($responseNavAs.index(this));
+    let $outputTabLinks = $(".output-tabs").children('li').children('a');
+
+    $outputTabLinks.click(function() {
+        select_response_tab($outputTabLinks.index(this));
     });
 
     $bCard.click(function() {
