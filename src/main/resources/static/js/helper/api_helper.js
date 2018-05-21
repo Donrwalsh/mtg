@@ -2,9 +2,6 @@ let $outputTabLinks = $(".output-tabs").children('li').children('a');
 let $outputNavTabs = $(".output-tabs").children('li');
 let $outputResponseDivs = $(".response-output");
 
-let $bCard = $("#bCard");
-let $bCardParam1 = $("#pCard");
-
 function display_card_val(field_name, type, value) {
     switch(type) {
         case 'int':

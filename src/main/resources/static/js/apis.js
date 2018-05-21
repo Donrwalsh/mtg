@@ -7,10 +7,16 @@ $(function () {
         select_response_tab($outputTabLinks.index(this));
     });
 
-    $bCard.click(function() {
+    $('.apiButton').keyup(function(event) {
+        if (event.keyCode === 13) {
+            $(this).parent().siblings().children('button').click();
+        }
+    });
+
+    $('#bCard').click(function() {
         let call = "/v0/card";
-        if( $bCardParam1.val() ) {
-            call += "?id=" + $bCardParam1.val();
+        if( $("#idCard").val() ) {
+            call += "?id=" + $("#idCard").val();
         }
         $.ajax({
             type: "GET",
@@ -27,8 +33,8 @@ $(function () {
 
     $('#bCards').click(function() {
         let call = "/v0/cards";
-        if( $('#pCards').val() ) {
-            call += "?name=" + $('#pCards').val();
+        if( $('#idCards').val() ) {
+            call += "?name=" + $('#idCards').val();
         }
         $.ajax({
             type: "GET",
@@ -37,7 +43,7 @@ $(function () {
                 handle_successful_response(response);
             },
             error: function (errmsg, txtstatus) {
-                var msg = JSON.parse(errmsg.responseText).message;
+                let msg = JSON.parse(errmsg.responseText).message;
                 console.log(msg);
             }
         });
