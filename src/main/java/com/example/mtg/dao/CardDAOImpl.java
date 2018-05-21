@@ -19,7 +19,7 @@ public class CardDAOImpl implements CardDAO {
     public CardDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
     private static final String GET_CARDS_BY_NAME =
-            "SELECT * FROM `cards` WHERE name LIKE ? LIMIT 10;";
+            "SELECT * FROM `cards` WHERE name LIKE ? ? LIMIT 10;";
 
     private static final String GET_CARD_BY_ID =
             "SELECT * FROM `cards` WHERE ID = ?";
@@ -33,7 +33,10 @@ public class CardDAOImpl implements CardDAO {
     }
 
     @Override
-    public List<Card> getCards(String name) { return jdbcTemplate.query(GET_CARDS_BY_NAME, new CardMapper(), name); }
+    public List<Card> getCards(String name, String set) {
+        System.out.println(GET_CARDS_BY_NAME, );
+        return jdbcTemplate.query(GET_CARDS_BY_NAME, new String[]{name, set},
+            new CardMapper()); }
 
     @Override
     public List<Card> getRandomCard() { return jdbcTemplate.query(GET_RANDOM_CARD, new CardMapper()); }

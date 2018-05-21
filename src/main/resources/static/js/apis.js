@@ -33,9 +33,8 @@ $(function () {
 
     $('#bCards').click(function() {
         let call = "/v0/cards";
-        if( $('#idCards').val() ) {
-            call += "?name=" + $('#idCards').val();
-        }
+        if( $('#nameCards').val() ) { call += "?name=" + $('#nameCards').val() + "&"; }
+        if( $('#setCards').val() ) { call += "?set=" + $('#setCards').val() + "&"; }
         $.ajax({
             type: "GET",
             url: call,

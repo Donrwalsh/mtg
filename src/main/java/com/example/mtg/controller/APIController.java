@@ -19,9 +19,22 @@ public class APIController {
     private CardService CS;
 
     @RequestMapping("v0/cards")
-    public List<Card> cards(@RequestParam(value="name", defaultValue="") String name) {
-        String constructed_name = "%" + name + "%";
-        List<Card> response = CS.GetAllCards(constructed_name);
+    public List<Card> cards(@RequestParam(value="name", defaultValue="") String name,
+                            @RequestParam(value="set", defaultValue="") String set) {
+        String constructed_set = "";
+        Long longSet;
+        try {
+            longSet = Long.parseLong(set);
+        } catch (NumberFormatException e) {
+             longSet = 0L;
+        }
+        if (longSet != 0L) {
+            constructed_set = "and `set` = " + Long.toString(longSet);
+        }
+        String constructed_name = "\"%" + name + "%\"";
+        System.out.println(constructed_name);
+        System.out.println(constructed_set);
+        List<Card> response = CS.GetAllCards(constructed_name, constructed_set);
         return response;
     }
 

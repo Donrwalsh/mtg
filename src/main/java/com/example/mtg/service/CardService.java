@@ -35,9 +35,11 @@ public class CardService {
         return response;
     }
 
-    public List<Card> GetAllCards(String name) {
+    public List<Card> GetAllCards(String name, String set) {
+        System.out.println(name);
+        System.out.println(set);
 
-        List<Card> response = CD.getCards(name);
+        List<Card> response = CD.getCards(name, set);
         for (Card card : response) {
             AppendMultivalues(card);
         }
