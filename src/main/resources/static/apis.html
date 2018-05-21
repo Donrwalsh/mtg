@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>MTG Don</title>
     <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 
 <body>
@@ -29,45 +30,37 @@
     </div>
 </nav>
 <div>
-    <h1 style="text-align:center">APIs</h1>
+    <h1 class="title">APIs</h1>
     <hr>
     <div class = "container-fluid">
-        <div id="output" class="col" style="max-width:40%;float:left;">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">1</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">2</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">3</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">4</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">5</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">6</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">7</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">8</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">9</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">10</a>
-                </li>
-            </ul>
+        <div class="col output">
+            <div class="output-navigation">
+                <ul class="nav nav-tabs output-tabs">
+                    <li> <a class="nav-link active" href="#">1</a> </li>
+                    <li> <a class="nav-link" href="#">2</a> </li>
+                    <li> <a class="nav-link" href="#">3</a> </li>
+                    <li> <a class="nav-link" href="#">4</a> </li>
+                    <li> <a class="nav-link" href="#">5</a> </li>
+                    <li> <a class="nav-link" href="#">6</a> </li>
+                    <li> <a class="nav-link" href="#">7</a> </li>
+                    <li> <a class="nav-link" href="#">8</a> </li>
+                    <li> <a class="nav-link" href="#">9</a> </li>
+                    <li> <a class="nav-link" href="#">10</a> </li>
+                </ul>
+            </div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
+            <div class="response-output"></div>
         </div>
-        <div class = "col" style="max-width:60%;float:left;">
-        <h2>cards</h2>
+        <div class = "col input">
+        <h2 class="small-title">cards</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -80,12 +73,12 @@
             <tr>
                 <td><button id="bCard" type="button" class="btn btn-primary">Try</button></td>
                 <td>/v0/card</td>
-                <td>?id=<input style="width:9.5rem" id="pCard" type="text" placeholder="Long"></td>
+                <td>?id=<input class="apiButton" id="idCard" type="text" placeholder="Long"></td>
             </tr>
             <tr>
                 <td><button id="bCards" type="button" class="btn btn-primary">Try</button></td>
                 <td>/v0/cards</td>
-                <td>?name=<input style="width:9.5rem" id="pCards" type="text" placeholder="String"></td>
+                <td>?name=<input class="apiButton" id="idCards" type="text" placeholder="String"></td>
             </tr>
             </tbody>
         </table>
@@ -99,7 +92,8 @@
         crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="js/jquery-3.3.1.min.js"><\/script>');</script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/index.js"></script>
+<script src="js/helper/api_helper.js"></script>
+<script src="js/apis.js"></script>
 
 </body>
 

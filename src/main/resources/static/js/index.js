@@ -1,31 +1,4 @@
-function display_card_val(field_name, type, value) {
-    switch(type) {
-        case 'int':
-            return "<strong>" + field_name + "</strong>: " + value + ",<br>";
-        case 'string':
-            return "<strong>" + field_name + "</strong>: \"" + value + "\",<br>"
-        case 'multi-string':
-            var result = "<strong>" + field_name + "</strong>: [";
-            $.each(value, function (i, item) {
-                if (i === (value).length-1) {
-                    result += "\"" + item + "\"";
-                } else {
-                    result += "\"" + item + "\",";
-                }
-            });
-            return result + "],<br>";
-        case 'multi-int':
-            var result = "<strong>" + field_name + "</strong>: [";
-            $.each(value, function (i, item) {
-                if (i === (value).length-1) {
-                    result += item;
-                } else {
-                    result += "" + item + ",";
-                }
-            });
-            return result + "],<br>";
-    }
-}
+
 
 $(function () {
     "use strict";
@@ -100,17 +73,35 @@ $(function () {
             type: "GET",
             url: call,
             success: function (response) {
-                console.log(response.length);
+                var $ULofNavs = $('.nav-tabs');
+                var $responseNavs = $('.nav-response');
+                $ULofNavs.css('border-bottom-width','1px;');
+                $responseNavs.css("display","none");
+                $responseNavs.each(function( i ) {
+                    if (i < response.length) {
+                        this.style.display = "block";
+                    }
+                });
+
+                //
+                // $responseNavs.css("display","block");
+                // for (var i = 0; i < response.length; i++) {
+                //     $responseNavs[i].css("display","block");
+                // }
+                // var responseNavs =  $('nav-response');
+                // $('.nav-response').css("display","block");
+                // console.log(response.length);
                 var resJSON = "";
-                console.log(response)
+                // console.log(response)
                 $.each(response, function (i, response) {
+
                     resJSON += JSON.stringify(response) + "<br>";
                 });
                 if( resJSON == "") {
                     resJSON = "{Empty Response}";
                 }
-                $('#output').empty();
-                $('#output').append(resJSON);
+                // $('#output').empty();
+                // $('#output').append(resJSON);
             },
             error: function (errmsg, txtstatus) {
                 var msg = JSON.parse(errmsg.responseText).message;

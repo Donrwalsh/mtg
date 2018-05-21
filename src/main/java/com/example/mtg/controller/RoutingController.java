@@ -1,12 +1,9 @@
 package com.example.mtg.controller;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.example.mtg.Helloworld;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 public class RoutingController {
@@ -18,10 +15,4 @@ public class RoutingController {
     public String card() {
         return "card.html";
     }
-
-//    @RequestMapping("/greeting")
-//    public Helloworld greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-//        return new Helloworld(counter.incrementAndGet(),
-//                String.format(template, name));
-//    }
 }
