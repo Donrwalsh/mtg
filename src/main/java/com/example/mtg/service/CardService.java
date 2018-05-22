@@ -54,7 +54,4 @@ public class CardService {
         }
         return response;
     }
-
-
-
 }

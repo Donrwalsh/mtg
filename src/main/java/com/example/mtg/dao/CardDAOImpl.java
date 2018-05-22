@@ -37,7 +37,6 @@ public class CardDAOImpl implements CardDAO {
     @Override
     public List<Card> getCards(String name, Long set) {
 
-
         String query = "SELECT * FROM `cards` WHERE name LIKE ? ";
         if (set != 0L) {
             query += "AND `set` = ? ";
@@ -67,7 +66,6 @@ public class CardDAOImpl implements CardDAO {
     private static final class CardMapper implements RowMapper<Card> {
 
         public Card mapRow(ResultSet rs, int rowNum) throws SQLException {
-
 
             Card card = new Card(
                     rs.getLong("id"),
