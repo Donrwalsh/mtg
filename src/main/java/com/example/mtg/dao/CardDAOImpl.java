@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -33,10 +35,31 @@ public class CardDAOImpl implements CardDAO {
     }
 
     @Override
-    public List<Card> getCards(String name, String set) {
-        System.out.println(GET_CARDS_BY_NAME, );
-        return jdbcTemplate.query(GET_CARDS_BY_NAME, new String[]{name, set},
-            new CardMapper()); }
+    public List<Card> getCards(String name, Long set) {
+
+
+        String query = "SELECT * FROM `cards` WHERE name LIKE ? ";
+        if (set != 0L) {
+            query += "AND `set` = ? ";
+        }
+        query += "LIMIT 10;";
+
+        try {
+            Connection c = jdbcTemplate.getDataSource().getConnection();
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, name);
+            if (set != 0L) { ps.setLong(2, set); }
+            String qdata = ps.toString().split(":")[1].trim();
+            Object[] args = new Object[]{name, set};
+            System.out.println(qdata);
+            c.close();
+            return jdbcTemplate.query(qdata, new CardMapper());
+
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 
     @Override
     public List<Card> getRandomCard() { return jdbcTemplate.query(GET_RANDOM_CARD, new CardMapper()); }

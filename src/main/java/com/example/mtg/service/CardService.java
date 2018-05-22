@@ -35,7 +35,7 @@ public class CardService {
         return response;
     }
 
-    public List<Card> GetAllCards(String name, String set) {
+    public List<Card> GetAllCards(String name, Long set) {
         System.out.println(name);
         System.out.println(set);
 

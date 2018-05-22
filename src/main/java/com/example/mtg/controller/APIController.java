@@ -28,13 +28,10 @@ public class APIController {
         } catch (NumberFormatException e) {
              longSet = 0L;
         }
-        if (longSet != 0L) {
-            constructed_set = "and `set` = " + Long.toString(longSet);
-        }
-        String constructed_name = "\"%" + name + "%\"";
+        String constructed_name = "%" + name + "%";
         System.out.println(constructed_name);
         System.out.println(constructed_set);
-        List<Card> response = CS.GetAllCards(constructed_name, constructed_set);
+        List<Card> response = CS.GetAllCards(constructed_name, longSet);
         return response;
     }
 
