@@ -33,9 +33,25 @@ $(function () {
 
     $('#bCards').click(function() {
         let call = "/v0/cards";
-        if( $('#idCards').val() ) {
-            call += "?name=" + $('#idCards').val();
+        let params = false;
+        if( $('#nameCards').val() ) {
+            if (params) {
+                call += "&name=" + $('#nameCards').val() + "&";
+            } else {
+                call += "?name=" + $('#nameCards').val() + "&";
+                params = true;
+            }
         }
+        if( $('#setCards').val() )
+        {
+            if (params) {
+                call += "&set=" + $('#setCards').val() + "&";
+            } else {
+                call += "?set=" + $('#setCards').val() + "&";
+                params = true;
+            }
+        }
+
         $.ajax({
             type: "GET",
             url: call,

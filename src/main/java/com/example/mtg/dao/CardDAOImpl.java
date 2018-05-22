@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +21,7 @@ public class CardDAOImpl implements CardDAO {
     public CardDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
     private static final String GET_CARDS_BY_NAME =
-            "SELECT * FROM `cards` WHERE name LIKE ? LIMIT 10;";
+            "SELECT * FROM `cards` WHERE name LIKE ? ? LIMIT 10;";
 
     private static final String GET_CARD_BY_ID =
             "SELECT * FROM `cards` WHERE ID = ?";
@@ -33,7 +35,30 @@ public class CardDAOImpl implements CardDAO {
     }
 
     @Override
-    public List<Card> getCards(String name) { return jdbcTemplate.query(GET_CARDS_BY_NAME, new CardMapper(), name); }
+    public List<Card> getCards(String name, Long set) {
+
+        String query = "SELECT * FROM `cards` WHERE name LIKE ? ";
+        if (set != 0L) {
+            query += "AND `set` = ? ";
+        }
+        query += "LIMIT 10;";
+
+        try {
+            Connection c = jdbcTemplate.getDataSource().getConnection();
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, name);
+            if (set != 0L) { ps.setLong(2, set); }
+            String qdata = ps.toString().split(":")[1].trim();
+            Object[] args = new Object[]{name, set};
+            System.out.println(qdata);
+            c.close();
+            return jdbcTemplate.query(qdata, new CardMapper());
+
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 
     @Override
     public List<Card> getRandomCard() { return jdbcTemplate.query(GET_RANDOM_CARD, new CardMapper()); }
@@ -41,7 +66,6 @@ public class CardDAOImpl implements CardDAO {
     private static final class CardMapper implements RowMapper<Card> {
 
         public Card mapRow(ResultSet rs, int rowNum) throws SQLException {
-
 
             Card card = new Card(
                     rs.getLong("id"),
