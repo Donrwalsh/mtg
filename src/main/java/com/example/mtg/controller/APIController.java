@@ -21,7 +21,6 @@ public class APIController {
     @RequestMapping("v0/cards")
     public List<Card> cards(@RequestParam(value="name", defaultValue="") String name,
                             @RequestParam(value="set", defaultValue="") String set) {
-        String constructed_set = "";
         Long longSet;
         try {
             longSet = Long.parseLong(set);
@@ -29,8 +28,7 @@ public class APIController {
              longSet = 0L;
         }
         String constructed_name = "%" + name + "%";
-        System.out.println(constructed_name);
-        System.out.println(constructed_set);
+
         List<Card> response = CS.GetAllCards(constructed_name, longSet);
         return response;
     }

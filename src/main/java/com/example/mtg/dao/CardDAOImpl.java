@@ -20,14 +20,9 @@ public class CardDAOImpl implements CardDAO {
     @Autowired
     public CardDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
-    private static final String GET_CARDS_BY_NAME =
-            "SELECT * FROM `cards` WHERE name LIKE ? ? LIMIT 10;";
+    private static final String GET_CARD_BY_ID = "SELECT * FROM `cards` WHERE ID = ?";
 
-    private static final String GET_CARD_BY_ID =
-            "SELECT * FROM `cards` WHERE ID = ?";
-
-    private static final String GET_RANDOM_CARD =
-            "SELECT * FROM `cards` ORDER BY RAND() LIMIT 1";
+    private static final String GET_RANDOM_CARD = "SELECT * FROM `cards` ORDER BY RAND() LIMIT 1";
 
     @Override
     public List<Card> getACard(Long id) {
@@ -46,11 +41,13 @@ public class CardDAOImpl implements CardDAO {
         try {
             Connection c = jdbcTemplate.getDataSource().getConnection();
             PreparedStatement ps = c.prepareStatement(query);
+
             ps.setString(1, name);
             if (set != 0L) { ps.setLong(2, set); }
+
+            //Without the extra split and trim, this query fails.
             String qdata = ps.toString().split(":")[1].trim();
-            Object[] args = new Object[]{name, set};
-            System.out.println(qdata);
+
             c.close();
             return jdbcTemplate.query(qdata, new CardMapper());
 
