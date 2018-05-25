@@ -24,7 +24,7 @@ function display_card_val(field_name, type, value) {
                 if (i === (value).length-1) {
                     miResult += item;
                 } else {
-                    miResult += "" + item + ",";
+                    miResult += item + ", ";
                 }
             });
             return miResult + "],<br>";

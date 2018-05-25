@@ -179,7 +179,7 @@ class DatabaseService(object):
             self.drop_table(table)
             self.create_table(table)
         i, j = 0, 0
-        variant_builder = []
+        variant_builder = {}
         multiverse_map = {}
         for set in data_sets:
             i += 1
@@ -208,15 +208,35 @@ class DatabaseService(object):
                 if Translator.db['subtypes']:
                     for subtype in Translator.db['subtypes']:
                         self.query("INSERT INTO subtypes (card_id, subtype) VALUES (" + str(j) + ", " + subtype + ");")
-                if Translator.db['variations']:
-                    for variant in Translator.db['variations']:
-                        variant_builder.append([j, int(variant)])
-                if 'multiverseid' in card:
-                    multiverse_map[card['multiverseid']] = j
+                # if Translator.db['variations']:
+                #     for variant in Translator.db['variations']:
+                #         if Translator.db['name'] in variant_builder:
+                #             variant_builder[Translator.db['name']].append(int(variant))
+                #         else:
+                #             variant_builder[Translator.db['name']] = [int(variant)]
+                # if 'multiverseid' in card:
+                #     multiverse_map[card['multiverseid']] = j
+                if card['name'] not in variant_builder:
+                    variant_builder[card['name']] = [j]
+                else:
+                    variant_builder[card['name']].append(j)
             Writer.action_with_highlight(Writer.progress(i, 223) + "Synchronized ", set['name'], ".")
 
-        for item in variant_builder:
-            self.query(
-                "INSERT INTO variations (card_id, variant_id) VALUES (" + str(item[0]) + ", " +
-                str(multiverse_map[item[1]]) + ");")
+        k = 0
+        for set in data_sets:
+            for card in data_cards[set['code']]["cards"]:
+                k += 1
+                for num in variant_builder[card['name']]:
+                    if num != k:
+                        self.query(
+                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(k) + ", " +
+                            str(num) + ");")
+
+
+        #
+        # for key in variant_builder:
+        #     for item in variant_builder[key]:
+        #         self.query(
+        #             "INSERT INTO variations (card_id, variant_id) VALUES (" + str(item[0]) + ", " +
+        #             str(multiverse_map[item[1]]) + ");")
         self.close_connections()
