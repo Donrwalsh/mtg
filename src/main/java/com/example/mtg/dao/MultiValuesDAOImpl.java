@@ -15,7 +15,7 @@ public class MultiValuesDAOImpl implements MultiValuesDAO {
     public MultiValuesDAOImpl(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
     private static final String GET_NAMES_BY_ID =
-            "SELECT name FROM `names` WHERE card = ?";
+            "SELECT name FROM `names` WHERE card_id = ?";
 
     private static final String GET_COLORS_BY_ID =
             "SELECT color FROM `colors` WHERE card_id = ?";

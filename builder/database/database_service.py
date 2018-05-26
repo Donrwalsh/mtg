@@ -59,7 +59,7 @@ class DatabaseService(object):
         elif table_name == "names":
             self.query("""CREATE TABLE `names` (
                                       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                                      `card` int(11) unsigned NOT NULL,
+                                      `card_id` int(11) unsigned NOT NULL,
                                       `name` VARCHAR(50) NOT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB DEFAULT CHARSET=utf8; """)
@@ -148,95 +148,70 @@ class DatabaseService(object):
                    "'" + set['type'] + "', " +
                    ('1' if set['onlineOnly'] is True else '0') + ");")
 
-    def add_card(self, card, set):
-        Translator = translator_service.TranslatorService(card)
+    def add_card(self, translated_card, set):
         self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
                    "toughness, loyalty, multiverseid, watermark, border, layout, timeshifted, reserved, starter) "
                    "VALUES (" +
-                   Translator.db['name'] + ", " +
-                   Translator.db['manaCost'] + ", " +
-                   Translator.db['cmc'] + ", " +
+                   translated_card.db['name'] + ", " +
+                   translated_card.db['manaCost'] + ", " +
+                   translated_card.db['cmc'] + ", " +
                    set + ", " +
-                   Translator.db['rarity'] + ", " +
-                   Translator.db['text'] + ", " +
-                   Translator.db['flavor'] + ", " +
-                   Translator.db['artist'] + ", " +
-                   Translator.db['number'] + ", " +
-                   Translator.db['power'] + ", " +
-                   Translator.db['toughness'] + ", " +
-                   Translator.db['loyalty'] + ", " +
-                   Translator.db['multiverseid'] + ", " +
-                   Translator.db['watermark'] + ", " +
-                   Translator.db['border'] + ", " +
-                   Translator.db['layout'] + ", " +
-                   Translator.db['timeshifted'] + ", " +
-                   Translator.db['reserved'] + ", " +
-                   Translator.db['starter'] +
+                   translated_card.db['rarity'] + ", " +
+                   translated_card.db['text'] + ", " +
+                   translated_card.db['flavor'] + ", " +
+                   translated_card.db['artist'] + ", " +
+                   translated_card.db['number'] + ", " +
+                   translated_card.db['power'] + ", " +
+                   translated_card.db['toughness'] + ", " +
+                   translated_card.db['loyalty'] + ", " +
+                   translated_card.db['multiverseid'] + ", " +
+                   translated_card.db['watermark'] + ", " +
+                   translated_card.db['border'] + ", " +
+                   translated_card.db['layout'] + ", " +
+                   translated_card.db['timeshifted'] + ", " +
+                   translated_card.db['reserved'] + ", " +
+                   translated_card.db['starter'] +
                    ");")
+
+    def populate_normalized_table(self, translated_card, id, field):
+        table_name = field if field != 'colorIdentities' else 'color_identities'
+        column_names = {
+            'names': 'name',
+            'colors': 'color',
+            'colorIdentities': 'color',
+            'supertypes': 'supertype',
+            'types': 'type',
+            'subtypes': 'subtype',
+        }
+        if translated_card.db[field]:
+            for item in translated_card.db[field]:
+                self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
+                           ") VALUES (" + id + ", " + item + ");")
 
     def build_database(self, data_cards, data_sets):
         for table in self.tables:
             self.drop_table(table)
             self.create_table(table)
-        i, j = 0, 0
         variant_builder = {}
-        multiverse_map = {}
-        for set in data_sets:
-            i += 1
+        i = 0
+        for s_index, set in enumerate(data_sets):
             self.add_set(set)
             for card in data_cards[set['code']]["cards"]:
-                j += 1
-                self.add_card(card, str(i))
-                Translator = translator_service.TranslatorService(card)
-                if Translator.db['names']:
-                    for name in Translator.db['names']:
-                        self.query("INSERT INTO names (card, name) VALUES (" + str(j) + ", " + name + ");")
-                if Translator.db['colors']:
-                    for color in Translator.db['colors']:
-                        self.query("INSERT INTO colors (card_id, color) VALUES (" + str(j) + ", " + color + ");")
-                if Translator.db['colorIdentities']:
-                    for colorIdentity in Translator.db['colorIdentities']:
-                        self.query("INSERT INTO color_identities (card_id, color) VALUES ("
-                                   + str(j) + ", " + colorIdentity + ");")
-                if Translator.db['supertypes']:
-                    for supertype in Translator.db['supertypes']:
-                        self.query("INSERT INTO supertypes (card_id, supertype) VALUES ("
-                                   + str(j) + ", " + supertype + ");")
-                if Translator.db['types']:
-                    for type in Translator.db['types']:
-                        self.query("INSERT INTO types (card_id, type) VALUES (" + str(j) + ", " + type + ");")
-                if Translator.db['subtypes']:
-                    for subtype in Translator.db['subtypes']:
-                        self.query("INSERT INTO subtypes (card_id, subtype) VALUES (" + str(j) + ", " + subtype + ");")
-                # if Translator.db['variations']:
-                #     for variant in Translator.db['variations']:
-                #         if Translator.db['name'] in variant_builder:
-                #             variant_builder[Translator.db['name']].append(int(variant))
-                #         else:
-                #             variant_builder[Translator.db['name']] = [int(variant)]
-                # if 'multiverseid' in card:
-                #     multiverse_map[card['multiverseid']] = j
+                i += 1
+                translated_card = translator_service.TranslatorService(card)
+                self.add_card(translated_card, str(s_index+1))
+                for field in ("names", "colors", 'colorIdentities', 'supertypes', 'types', 'subtypes'):
+                    self.populate_normalized_table(translated_card, str(i), field)
                 if card['name'] not in variant_builder:
-                    variant_builder[card['name']] = [j]
+                    variant_builder[card['name']] = [i]
                 else:
-                    variant_builder[card['name']].append(j)
-            Writer.action_with_highlight(Writer.progress(i, 223) + "Synchronized ", set['name'], ".")
-
-        k = 0
-        for set in data_sets:
-            for card in data_cards[set['code']]["cards"]:
-                k += 1
-                for num in variant_builder[card['name']]:
-                    if num != k:
+                    for variant in variant_builder[card['name']]:
                         self.query(
-                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(k) + ", " +
-                            str(num) + ");")
-
-
-        #
-        # for key in variant_builder:
-        #     for item in variant_builder[key]:
-        #         self.query(
-        #             "INSERT INTO variations (card_id, variant_id) VALUES (" + str(item[0]) + ", " +
-        #             str(multiverse_map[item[1]]) + ");")
+                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(variant) + ", " +
+                            str(i) + ");")
+                        self.query(
+                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(i) + ", " +
+                            str(variant) + ");")
+                    variant_builder[card['name']].append(i)
+            Writer.action_with_highlight(Writer.progress(s_index, len(data_sets)) + "Synchronized ", set['name'], ".")
         self.close_connections()
