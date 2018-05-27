@@ -6,7 +6,9 @@ import translator_service
 
 class DatabaseService(object):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        self.build = True if kwargs.get('build') else False
+        self.verbose = True if kwargs.get('verbose') else False
         try:
             self.conn = pymysql.connect(host=database.identity.host,
                                         user=database.identity.user,
@@ -21,6 +23,8 @@ class DatabaseService(object):
         self.conn.set_charset('utf8')
 
     def query(self, query):
+        if self.verbose:
+            Writer.action_with_highlight("Performing SQL Query: ", query, ".")
         try:
             self.cur.execute(query)
         except pymysql.err.DatabaseError as e:
@@ -118,14 +122,8 @@ class DatabaseService(object):
         # Writer.action_with_highlight("Table `", table_name, "` has been created.")
 
     def drop_table(self, table_name):
-        try:
-            self.cur.execute("DROP TABLE IF EXISTS `" + table_name + "`;")
-        except pymysql.err.DatabaseError as e:
-            Writer.error("Critical error working with database:", e)
-            exit()
-        else:
-            self.conn.commit()
-            # Writer.action_with_highlight("Table `", table_name, "` has been dropped.")
+        self.query("DROP TABLE IF EXISTS `" + table_name + "`;")
+        self.conn.commit()
 
     def close_connections(self):
         try:
@@ -139,16 +137,18 @@ class DatabaseService(object):
             Writer.action("Database connection closed.")
 
     def add_set(self, set):
-        self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
-                   "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
-                   "'" + set['code'] + "', " +
-                   "'" + set['releaseDate'] + "', " +
-                   "'" + set['border'] + "', " +
-                   "'" + set['type'] + "', " +
-                   ('1' if set['onlineOnly'] is True else '0') + ");")
+        if self.build:
+            self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
+                       "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
+                       "'" + set['code'] + "', " +
+                       "'" + set['releaseDate'] + "', " +
+                       "'" + set['border'] + "', " +
+                       "'" + set['type'] + "', " +
+                       ('1' if set['onlineOnly'] is True else '0') + ");")
 
     def add_card(self, translated_card, set):
-        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
+        if self.build:
+            self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
                    "toughness, loyalty, multiverseid, watermark, border, layout, timeshifted, reserved, starter) "
                    "VALUES (" +
                    translated_card.db['name'] + ", " +
@@ -173,55 +173,32 @@ class DatabaseService(object):
                    ");")
 
     def populate_normalized_table(self, translated_card, id, field):
-        table_name = field if field != 'colorIdentities' else 'color_identities'
-        column_names = {
-            'names': 'name',
-            'colors': 'color',
-            'colorIdentities': 'color',
-            'supertypes': 'supertype',
-            'types': 'type',
-            'subtypes': 'subtype',
-        }
-        if translated_card.db[field]:
-            for item in translated_card.db[field]:
-                self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
-                           ") VALUES (" + id + ", " + item + ");")
+        if self.build:
+            table_name = field if field != 'colorIdentities' else 'color_identities'
+            column_names = {
+                'names': 'name',
+                'colors': 'color',
+                'colorIdentities': 'color',
+                'supertypes': 'supertype',
+                'types': 'type',
+                'subtypes': 'subtype',
+            }
+            if translated_card.db[field]:
+                for item in translated_card.db[field]:
+                    self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
+                               ") VALUES (" + id + ", " + item + ");")
 
     def build_database(self, data_cards, data_sets):
-        tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
-        Writer.action_stub("Dropping tables ")
-        for table in tables:
-            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
-            self.drop_table(table)
-        Writer.action('.')
-        Writer.action_stub("Creating tables ")
-        for table in tables:
-            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
-            self.create_table(table)
-        Writer.action('.')
+        if self.build:
+            tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
+            Writer.action_stub("Dropping tables ")
+            for table in tables:
+                Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
+                self.drop_table(table)
+            Writer.action('.')
+            Writer.action_stub("Creating tables ")
+            for table in tables:
+                Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
+                self.create_table(table)
+            Writer.action('.')
 
-        variant_builder = {}
-        i, j = 0, 0
-        for s_index, set in enumerate(data_sets):
-            self.add_set(set)
-            for card in data_cards[set['code']]["cards"]:
-                i += 1
-                translated_card = translator_service.TranslatorService(card)
-                self.add_card(translated_card, str(s_index+1))
-                for field in ("names", "colors", 'colorIdentities', 'supertypes', 'types', 'subtypes'):
-                    self.populate_normalized_table(translated_card, str(i), field)
-                if card['name'] not in variant_builder:
-                    variant_builder[card['name']] = [i]
-                else:
-                    for variant in variant_builder[card['name']]:
-                        self.query(
-                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(variant) + ", " +
-                            str(i) + ");")
-                        self.query(
-                            "INSERT INTO variations (card_id, variant_id) VALUES (" + str(i) + ", " +
-                            str(variant) + ");")
-                    variant_builder[card['name']].append(i)
-            Writer.action_with_highlight_stub(Writer.progress(s_index, len(data_sets)) + " Synchronized ", set['name'.replace('—', '-')], Writer.pad_right(".", 42-len(set['name'])))
-            Writer.action_with_highlight('| ', Writer.pad_right(str(i - j), 3), ' | ')
-            j = i
-        self.close_connections()
