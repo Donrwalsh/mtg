@@ -28,6 +28,10 @@ class Writer:
         sys.stdout.write(f"{Fore.BLUE}" + message + "\n")
 
     @classmethod
+    def action_stub(cls, message):
+        sys.stdout.write(f"{Fore.BLUE}" + message)
+
+    @classmethod
     def note(cls, message):
         sys.stdout.write(f"{Fore.CYAN}" + message + "\n")
 
@@ -50,6 +54,16 @@ class Writer:
         sys.stdout.write(f"{Fore.BLUE}" + message1 +
                          f"{Fore.YELLOW}" + highlight +
                          f"{Fore.BLUE}" + message2 + "\n")
+
+    @classmethod
+    def action_with_highlight_stub(cls, message1, highlight, message2):
+        sys.stdout.write(f"{Fore.BLUE}" + message1 +
+                         f"{Fore.YELLOW}" + highlight +
+                         f"{Fore.BLUE}" + message2)
+
+    @classmethod
+    def pad_right(cls, message, total_length):
+        return message + " " * (total_length - len(message))
 
     @classmethod
     def progress(cls, current, total):

@@ -9,22 +9,29 @@ from writer_service import Writer
 
 class JsonService:
 
-    def __init__(self, dir):
+    def __init__(self, dir, **kwargs):
         self.location = dir + '/AllSets-x.json'
-        if not os.path.isfile(self.location):
-            Writer.action("No source found. Downloading card data.")
-            try:
-                urlretrieve("http://www.mtgjson.com/json/AllSets-x.json.zip", self.location + ".zip")
-            except urllib.error.HTTPError as e:
-                Writer.error("Critical error retrieving source data", e)
-                exit()
-            zip_ref = zipfile.ZipFile(self.location + ".zip", 'r')
-            zip_ref.extractall(dir)
-            zip_ref.close()
-            os.remove(self.location + ".zip")
-            Writer.action("Source data downloaded to " + self.location)
+
+        if kwargs.get('update'):
+            self.download_mtg_json(dir, 'Update requested.')
         else:
-            Writer.note("Source_data already exists.")
+            if not os.path.isfile(self.location):
+                self.download_mtg_json(dir, "No source found.")
+            else:
+                Writer.note("Source_data already exists.")
+
+    def download_mtg_json(self, dir, msg):
+        Writer.action(msg + " Downloading latest card data.")
+        try:
+            urlretrieve("http://www.mtgjson.com/json/AllSets-x.json.zip", self.location + ".zip")
+        except urllib.error.HTTPError as e:
+            Writer.error("Critical error retrieving source data", e)
+            exit()
+        zip_ref = zipfile.ZipFile(self.location + ".zip", 'r')
+        zip_ref.extractall(dir)
+        zip_ref.close()
+        os.remove(self.location + ".zip")
+        Writer.action_with_highlight("Source data downloaded to ", self.location, ".")
 
     def import_data(self):
         with open(self.location, encoding="utf8") as data_file:

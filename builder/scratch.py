@@ -11,44 +11,58 @@ from writer_service import Writer
 import pprint
 
 
-
-
-
-
-exit()
-
-JsonPeon = source.json_service.JsonService('source')
-DbCardPeon = database.database_service.DatabaseService()
-
-data = JsonPeon.import_data()
-
-# JsonPeon.report_longest_values(sets)
+# def f(*args, **kwargs):
+#    print('args: ', args, ' kwargs: ', kwargs)
+#
+# f('a')
+# f(ar='a')
+# f(1,2,param=3)
+# #
+# #
+# #
+# #
 # exit()
 #
-# rarities = []
-# j = 0
-# for set in data:
-#     for card in data[set]['cards']:
-#         if 'timeshifted' in card:
-#             print(card['timeshifted'])
+JsonService = source.json_service.JsonService('source')
+data = JsonService.import_data()
+DATA_SETS = JsonService.create_set_data(data)
+max = 0
+for set in DATA_SETS:
+   if len(set['name']) > max:
+      print(set['name'])
+      max = len(set['name'])
+print(max)
+# DbCardPeon = database.database_service.DatabaseService()
 #
-# print(j)
-# exit()
-
-pprint.pprint(rarities)
-
-# pprint.pprint(JsonPeon.create_set_data(data))
-# d_output = {}
-# output = []
+# data = JsonPeon.import_data()
 #
-# for set in data:
+# # JsonPeon.report_longest_values(sets)
+# # exit()
+# #
+# # rarities = []
+# # j = 0
+# # for set in data:
+# #     for card in data[set]['cards']:
+# #         if 'timeshifted' in card:
+# #             print(card['timeshifted'])
+# #
+# # print(j)
+# # exit()
 #
-#     d_addition = {'set': set, 'date': data[set]['releaseDate']}
-#     # addition = (set, data[set]['releaseDate'])
-#     output.append(d_addition)
+# pprint.pprint(rarities)
 #
-#
-#
+# # pprint.pprint(JsonPeon.create_set_data(data))
+# # d_output = {}
+# # output = []
+# #
+# # for set in data:
+# #
+# #     d_addition = {'set': set, 'date': data[set]['releaseDate']}
+# #     # addition = (set, data[set]['releaseDate'])
+# #     output.append(d_addition)
+# #
+# #
+# #
 # pprint.pprint(output)
 
 

@@ -1,42 +1,27 @@
 # -*- coding: utf-8 -*-
-import source.json_service
-import database.database_service
 import argparse
 import requests
 import shutil
 import pprint
 import os
 
-# Command-Line invocations
+import source.json_service
+import database.database_service
 from writer_service import Writer
 
+# Command line invocations
 parser = argparse.ArgumentParser()
-
-parser.add_argument("--verify", help="Verifies nothing, but will", action="store_true")
+parser.add_argument("--update", help="Updates source data", action="store_true")
 parser.add_argument("--build", help="destroy, then build the database", action="store_true")
 parser.add_argument("--images", help="fetch images (in-progress", action="store_true")
-
 args = parser.parse_args()
 
-# if args.verify:
-# Verify the MTGJSON data is the latest release.
-# Verify the Databsae (in tiers):
-# Verify the number of cards matches mtgJSON data.
-
-
-JsonService = source.json_service.JsonService('source')
+JsonService = source.json_service.JsonService('source', update=args.update)
 DatabaseService = database.database_service.DatabaseService()
 
 # Raw unmodified JSON data
 DATA_CARDS = JsonService.import_data()
 DATA_SETS = JsonService.create_set_data(DATA_CARDS)
-
-# List of set codes. Used frequently for iteration
-SETS = []
-for set in DATA_SETS:
-    SETS.append(set['code'])
-
-
 
 if args.build:
     DatabaseService.build_database(DATA_CARDS, DATA_SETS)

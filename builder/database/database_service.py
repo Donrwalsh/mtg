@@ -5,7 +5,6 @@ import translator_service
 
 
 class DatabaseService(object):
-    tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
 
     def __init__(self):
         try:
@@ -116,7 +115,7 @@ class DatabaseService(object):
                                       `variant_id` int(11) unsigned NOT NULL,
                                       PRIMARY KEY (`id`)
                                       ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
-        Writer.action_with_highlight("Table `", table_name, "` has been created.")
+        # Writer.action_with_highlight("Table `", table_name, "` has been created.")
 
     def drop_table(self, table_name):
         try:
@@ -126,7 +125,7 @@ class DatabaseService(object):
             exit()
         else:
             self.conn.commit()
-            Writer.action_with_highlight("Table `", table_name, "` has been dropped.")
+            # Writer.action_with_highlight("Table `", table_name, "` has been dropped.")
 
     def close_connections(self):
         try:
@@ -189,11 +188,20 @@ class DatabaseService(object):
                            ") VALUES (" + id + ", " + item + ");")
 
     def build_database(self, data_cards, data_sets):
-        for table in self.tables:
+        tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
+        Writer.action_stub("Dropping tables ")
+        for table in tables:
+            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
             self.drop_table(table)
+        Writer.action('.')
+        Writer.action_stub("Creating tables ")
+        for table in tables:
+            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
             self.create_table(table)
+        Writer.action('.')
+
         variant_builder = {}
-        i = 0
+        i, j = 0, 0
         for s_index, set in enumerate(data_sets):
             self.add_set(set)
             for card in data_cards[set['code']]["cards"]:
@@ -213,5 +221,7 @@ class DatabaseService(object):
                             "INSERT INTO variations (card_id, variant_id) VALUES (" + str(i) + ", " +
                             str(variant) + ");")
                     variant_builder[card['name']].append(i)
-            Writer.action_with_highlight(Writer.progress(s_index, len(data_sets)) + "Synchronized ", set['name'], ".")
+            Writer.action_with_highlight_stub(Writer.progress(s_index, len(data_sets)) + " Synchronized ", set['name'.replace('—', '-')], Writer.pad_right(".", 42-len(set['name'])))
+            Writer.action_with_highlight('| ', Writer.pad_right(str(i - j), 3), ' | ')
+            j = i
         self.close_connections()
