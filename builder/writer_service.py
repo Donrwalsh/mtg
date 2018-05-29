@@ -50,6 +50,18 @@ class Writer:
                          f"{Fore.CYAN}" + message2 + "\n")
 
     @classmethod
+    def action_highlight_alternating(cls, *args):
+        toggle = True
+        for arg in args:
+            if toggle:
+                sys.stdout.write(f"{Fore.BLUE}" + arg)
+            else:
+                sys.stdout.write(f"{Fore.YELLOW}" + arg)
+            toggle = not toggle
+        sys.stdout.write("\n")
+
+
+    @classmethod
     def action_with_highlight(cls, message1, highlight, message2):
         sys.stdout.write(f"{Fore.BLUE}" + message1 +
                          f"{Fore.YELLOW}" + highlight +

@@ -33,8 +33,12 @@ i, j = 0, 0                 # 'i' tracks current card, 'j' checkpoints last comp
 variant_builder = {}        # only used when building
 
 # Output header
-Writer.action_with_highlight_stub("[", " PROGRESS ", "]" + " " * (56 if args.build else 43))
-Writer.action_with_highlight("|", "CARDS", "|")
+if args.build or args.images:
+    Writer.action_with_highlight_stub("[", " PROGRESS ", "]" + " " * 56)
+else:
+    Writer.action_stub(" " * 43)
+
+Writer.action_highlight_alternating("|", "CARDS", "|", " DB_ACTION ", "|", " IMAGES", "|", " IMG_ACTION ", "|",)
 
 # Main street
 for s_index, set in enumerate(DATA_SETS):
@@ -59,9 +63,19 @@ for s_index, set in enumerate(DATA_SETS):
                 variant_builder[card['name']].append(i)
 
     # Set output. Some fancy length-play going on for output depending on actions taken
-    Writer.action_with_highlight_stub(Writer.progress(s_index+1, len(DATA_SETS)) + " Synchronized " if args.build else " ",
-                                      set['name'].replace('—', '-'), Writer.pad_right(".", 42 - len(set['name'])))
-    Writer.action_with_highlight('| ', Writer.pad_right(str(i - j), 3), ' | ')
+    Writer.action_highlight_alternating(
+        Writer.progress(s_index+1, len(DATA_SETS)) + " Synchronized " if args.build else " ",
+        set['name'].replace('—', '-'),
+        Writer.pad_right(".", 42 - len(set['name'])) + "| ",
+        Writer.pad_right(str(i - j), 3),
+        " | ",
+        Writer.pad_right("DB_Added" if args.build else "DB_None", 10),
+        "|  ",
+        Writer.pad_right("num", 5),
+        "| ",
+        Writer.pad_right("IMG_Added" if args.images else "IMG_None", 11),
+        "|"
+    )
     j = i
 
 # Images is not part of the main loop, but should be.
