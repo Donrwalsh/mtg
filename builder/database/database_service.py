@@ -7,7 +7,6 @@ import translator_service
 class DatabaseService(object):
 
     def __init__(self, **kwargs):
-        self.build = True if kwargs.get('build') else False
         self.verbose = True if kwargs.get('verbose') else False
         try:
             self.conn = pymysql.connect(host=database.identity.host,
@@ -137,68 +136,64 @@ class DatabaseService(object):
             Writer.action("Database connection closed.")
 
     def add_set(self, set):
-        if self.build:
-            self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
-                       "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
-                       "'" + set['code'] + "', " +
-                       "'" + set['releaseDate'] + "', " +
-                       "'" + set['border'] + "', " +
-                       "'" + set['type'] + "', " +
-                       ('1' if set['onlineOnly'] is True else '0') + ");")
+        self.query("INSERT INTO sets (name, code, releaseDate, border, type, onlineOnly) VALUES ( " +
+                   "'" + (set['name'].replace("'", "''")).replace("—", "-") + "', " +
+                   "'" + set['code'] + "', " +
+                   "'" + set['releaseDate'] + "', " +
+                   "'" + set['border'] + "', " +
+                   "'" + set['type'] + "', " +
+                   ('1' if set['onlineOnly'] is True else '0') + ");")
 
     def add_card(self, translated_card, set):
-        if self.build:
-            self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
-                   "toughness, loyalty, multiverseid, watermark, border, layout, timeshifted, reserved, starter) "
-                   "VALUES (" +
-                   translated_card.db['name'] + ", " +
-                   translated_card.db['manaCost'] + ", " +
-                   translated_card.db['cmc'] + ", " +
-                   set + ", " +
-                   translated_card.db['rarity'] + ", " +
-                   translated_card.db['text'] + ", " +
-                   translated_card.db['flavor'] + ", " +
-                   translated_card.db['artist'] + ", " +
-                   translated_card.db['number'] + ", " +
-                   translated_card.db['power'] + ", " +
-                   translated_card.db['toughness'] + ", " +
-                   translated_card.db['loyalty'] + ", " +
-                   translated_card.db['multiverseid'] + ", " +
-                   translated_card.db['watermark'] + ", " +
-                   translated_card.db['border'] + ", " +
-                   translated_card.db['layout'] + ", " +
-                   translated_card.db['timeshifted'] + ", " +
-                   translated_card.db['reserved'] + ", " +
-                   translated_card.db['starter'] +
-                   ");")
+        self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
+               "toughness, loyalty, multiverseid, watermark, border, layout, timeshifted, reserved, starter) "
+               "VALUES (" +
+               translated_card.db['name'] + ", " +
+               translated_card.db['manaCost'] + ", " +
+               translated_card.db['cmc'] + ", " +
+               set + ", " +
+               translated_card.db['rarity'] + ", " +
+               translated_card.db['text'] + ", " +
+               translated_card.db['flavor'] + ", " +
+               translated_card.db['artist'] + ", " +
+               translated_card.db['number'] + ", " +
+               translated_card.db['power'] + ", " +
+               translated_card.db['toughness'] + ", " +
+               translated_card.db['loyalty'] + ", " +
+               translated_card.db['multiverseid'] + ", " +
+               translated_card.db['watermark'] + ", " +
+               translated_card.db['border'] + ", " +
+               translated_card.db['layout'] + ", " +
+               translated_card.db['timeshifted'] + ", " +
+               translated_card.db['reserved'] + ", " +
+               translated_card.db['starter'] +
+               ");")
 
     def populate_normalized_table(self, translated_card, id, field):
-        if self.build:
-            table_name = field if field != 'colorIdentities' else 'color_identities'
-            column_names = {
-                'names': 'name',
-                'colors': 'color',
-                'colorIdentities': 'color',
-                'supertypes': 'supertype',
-                'types': 'type',
-                'subtypes': 'subtype',
-            }
-            if translated_card.db[field]:
-                for item in translated_card.db[field]:
-                    self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
-                               ") VALUES (" + id + ", " + item + ");")
+        table_name = field if field != 'colorIdentities' else 'color_identities'
+        column_names = {
+            'names': 'name',
+            'colors': 'color',
+            'colorIdentities': 'color',
+            'supertypes': 'supertype',
+            'types': 'type',
+            'subtypes': 'subtype',
+        }
+        if translated_card.db[field]:
+            for item in translated_card.db[field]:
+                self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
+                           ") VALUES (" + id + ", " + item + ");")
 
     def build_database(self, data_cards, data_sets):
-        if self.build:
-            tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
-            Writer.action_stub("Dropping tables ")
-            for table in tables:
-                Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
-                self.drop_table(table)
-            Writer.action('.')
-            Writer.action_stub("Creating tables ")
-            for table in tables:
-                Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
-                self.create_table(table)
-            Writer.action('.')
+        tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
+        Writer.action_stub("Dropping tables ")
+        for table in tables:
+            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
+            self.drop_table(table)
+        Writer.action('.')
+        Writer.action_stub("Creating tables ")
+        for table in tables:
+            Writer.action_with_highlight_stub("`", table, "` " if table != 'variations' else "`")
+            self.create_table(table)
+        Writer.action('.')
 

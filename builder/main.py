@@ -26,7 +26,8 @@ DATA_CARDS = JsonService.import_data()
 DATA_SETS = JsonService.create_set_data(DATA_CARDS)
 
 # Drops and recreates the database tables if we are building.
-DatabaseService.build_database(DATA_CARDS, DATA_SETS)
+if args.build:
+    DatabaseService.build_database(DATA_CARDS, DATA_SETS)
 
 i, j = 0, 0                 # 'i' tracks current card, 'j' checkpoints last completed set
 variant_builder = {}        # only used when building
@@ -37,15 +38,15 @@ Writer.action_with_highlight("|", "CARDS", "|")
 
 # Main street
 for s_index, set in enumerate(DATA_SETS):
-    DatabaseService.add_set(set)
+    if args.build:
+        DatabaseService.add_set(set)
     for card in DATA_CARDS[set['code']]["cards"]:
         i += 1
         translated_card = TranslatorService(card)
-        DatabaseService.add_card(translated_card, str(s_index+1))
+
+        DatabaseService.add_card(translated_card, str(s_index + 1))
         for field in ("names", "colors", 'colorIdentities', 'supertypes', 'types', 'subtypes'):
             DatabaseService.populate_normalized_table(translated_card, str(i), field)
-
-        # Only bother with variants if we are building. This conditional lets us call query directly.
         if args.build:
             if card['name'] not in variant_builder:
                 variant_builder[card['name']] = [i]
