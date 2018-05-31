@@ -53,10 +53,13 @@ class Writer:
     def action_highlight_alternating(cls, *args):
         toggle = True
         for arg in args:
-            if toggle:
-                sys.stdout.write(f"{Fore.BLUE}" + arg)
+            if arg[0:3] == "err":
+                sys.stdout.write(f"{Fore.LIGHTRED_EX}" + arg[3:])
             else:
-                sys.stdout.write(f"{Fore.YELLOW}" + arg)
+                if toggle:
+                    sys.stdout.write(f"{Fore.BLUE}" + arg)
+                else:
+                    sys.stdout.write(f"{Fore.YELLOW}" + arg)
             toggle = not toggle
         sys.stdout.write("\n")
 

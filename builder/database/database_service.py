@@ -144,6 +144,10 @@ class DatabaseService(object):
                    "'" + set['type'] + "', " +
                    ('1' if set['onlineOnly'] is True else '0') + ");")
 
+    def add_variant(self, variant, card_id):
+        self.query("INSERT INTO variations (card_id, variant_id) VALUES (" + str(variant) + ", " + str(card_id) + ");")
+        self.query("INSERT INTO variations (card_id, variant_id) VALUES (" + str(card_id) + ", " + str(variant) + ");")
+
     def add_card(self, translated_card, set):
         self.query("INSERT INTO cards (name, manaCost, cmc, `set`, rarity, text, flavor, artist, number, power, "
                "toughness, loyalty, multiverseid, watermark, border, layout, timeshifted, reserved, starter) "
@@ -184,7 +188,7 @@ class DatabaseService(object):
                 self.query("INSERT INTO " + table_name + "(card_id, " + column_names[field] +
                            ") VALUES (" + id + ", " + item + ");")
 
-    def build_database(self, data_cards, data_sets):
+    def build_database(self):
         tables = ('cards', 'names', 'sets', 'colors', 'color_identities', 'supertypes', 'types', 'subtypes', 'variations')
         Writer.action_stub("Dropping tables ")
         for table in tables:
