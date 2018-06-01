@@ -3,7 +3,7 @@ builder/source/AllSets-x.json
 builder/database/identity.py
 images/
 *.pyc
-*.properties
+.properties
 
 ### Came from Spring Initializr: ###
 

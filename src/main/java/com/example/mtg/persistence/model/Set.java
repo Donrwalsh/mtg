@@ -6,27 +6,65 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sets")
+@Table(name = "sets")
 public class Set {
 
-    @Id
-    @Column(name="id")
+
     private Long id;
-
-    @Column(name="name")
     private String name;
-
-    @Column(name="code")
     private String code;
+    private String releaseDate;
+    private String border;
+    private String type;
+    private boolean onlineOnly;
 
-    public Set() {}
+    public Set() {
+    }
 
-    public Set(Long id, String name, String code) {
+    public Set(Long id, String name, String code, String releaseDate, String border, String type, boolean onlineOnly) {
         this.id = id;
         this.name = name;
         this.code = code;
+        this.releaseDate = releaseDate;
+        this.border = border;
+        this.type = type;
+        this.onlineOnly = onlineOnly;
     }
 
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getBorder() {
+        return border;
+    }
+
+    public void setBorder(String border) {
+        this.border = border;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isOnlineOnly() {
+        return onlineOnly;
+    }
+
+    public void setOnlineOnly(boolean onlineOnly) {
+        this.onlineOnly = onlineOnly;
+    }
+
+    @Id
+    @Column(name = "id")
     public Long getId() {
         return id;
     }
