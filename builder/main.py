@@ -93,3 +93,5 @@ for s_index, set in enumerate(DATA_SETS):
         "|"
     )
     previous_sets_total = current_card_count
+
+DatabaseService.close_connections()
