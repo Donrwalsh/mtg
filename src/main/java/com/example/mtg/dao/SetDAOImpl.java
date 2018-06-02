@@ -23,9 +23,15 @@ public class SetDAOImpl implements SetDAO {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Set> list() {
+    public List<Set> getSets() {
         Session session = this.sessionFactory.openSession();
         List<Set> setList = session.createQuery("FROM Set").list();
+        return setList;
+    }
+
+    public List<Set> getASet(Long id) {
+        Session session = this.sessionFactory.openSession();
+        List<Set> setList = session.createQuery("FROM Set WHERE id = " + id).list();
         return setList;
     }
 }

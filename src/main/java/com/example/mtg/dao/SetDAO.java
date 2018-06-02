@@ -6,6 +6,8 @@ import com.example.mtg.persistence.model.Set;
 
 public interface SetDAO {
 
-    List<Set> list();
+    List<Set> getSets();
+    List<Set> getASet(Long id);
+
 
 }
