@@ -8,6 +8,7 @@ import source.json_service
 import database.database_service
 from writer_service import Writer
 from translator_service import TranslatorService
+import source.image_service
 
 # Command line invocations
 parser = argparse.ArgumentParser()
@@ -19,6 +20,7 @@ args = parser.parse_args()
 
 JsonService = source.json_service.JsonService('source', update=args.update)
 DatabaseService = database.database_service.DatabaseService(build=args.build, verbose=args.verbose)
+ImageService = source.image_service.ImageService()
 
 # Raw unmodified JSON data
 DATA_CARDS = JsonService.import_data()
@@ -62,15 +64,11 @@ for s_index, set in enumerate(DATA_SETS):
                 variant_builder[card['name']].append(current_card_count)
 
         if args.images:
-            if not os.path.exists('../images/' + set['code'] + '/'):
-                os.makedirs('../images/' + set['code'] + '/')
-            if not os.path.exists('../images/' + set['code'] + '/' + str(current_card_count) + '.jpg'):
+            if not ImageService.set_directory_exists(set['code']):
+                ImageService.create_directory(set['code'])
+            if not ImageService.image_exists(set['code'], current_card_count):
                 try:
-                    r = requests.get(url='https://api.scryfall.com/cards/multiverse/' + str(card['multiverseid']))
-                    url = r.json()['image_uris']['normal']
-                    response = requests.get(url, stream=True)
-                    with open('../images/' + set['code'] + '/' + str(current_card_count) + '.jpg', 'wb') as out_file:
-                        shutil.copyfileobj(response.raw, out_file)
+                    ImageService.fetch_image_by_multiverse_id(set['code'], card['multiverseid'], current_card_count)
                     img_count += 1
                 except KeyError as e:
                     #TODO: Errors should be agregated and shown in the output somehow.

@@ -84,6 +84,11 @@
             <artifactId>tomcat-dbcp</artifactId>
             <version>${tomcat-dbcp.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.magicthegathering</groupId>
+            <artifactId>javasdk</artifactId>
+            <version>0.0.10</version>
+        </dependency>
 
 	</dependencies>
 
