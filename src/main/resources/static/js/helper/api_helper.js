@@ -31,6 +31,20 @@ function display_card_val(field_name, type, value) {
     }
 }
 
+function display_set(set) {
+    let result = "";
+    result += "<p>";
+    result += display_card_val('id', 'int', set.id);
+    result += display_card_val('name', 'string', set.name);
+    result += display_card_val('code', 'string', set.code);
+    result += display_card_val('releaseDate', 'string', set.releaseDate);
+    result += display_card_val('border', 'string', set.border);
+    result += display_card_val('type', 'string', set.type);
+    result += display_card_val('onlineOnly', 'string', set.onlineOnly);
+    result += "</p>";
+    return result;
+}
+
 function display_card(card) {
     let result = "";
     result += "<p>";
@@ -72,7 +86,7 @@ function select_response_tab(i) {
     $outputResponseDivs.eq(i).css("display", "block");
 }
 
-function handle_successful_response(response) {
+function handle_successful_response(response, objectType) {
     $('.output-navigation').css("border-bottom-width","1px");
     $outputNavTabs.css("display","none");
     $outputNavTabs.each(function( i ) {
@@ -85,7 +99,14 @@ function handle_successful_response(response) {
         if (response === "") {
             resJSON = "{Empty Response}";
         } else {
-            resJSON = display_card(response);
+            switch(objectType) {
+                case 'card':
+                    resJSON = display_card(response);
+                    break;
+                case 'set':
+                    resJSON = display_set(response);
+                    break;
+            }
         }
         $('.response-output:eq(' + i + ')').empty().append(resJSON);
     });

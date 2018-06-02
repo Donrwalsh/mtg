@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Named;
 import java.util.List;
+import java.util.Random;
 
 @Named
 public class SetDAOImpl implements SetDAO {
@@ -31,7 +32,13 @@ public class SetDAOImpl implements SetDAO {
 
     public List<Set> getASet(Long id) {
         Session session = this.sessionFactory.openSession();
-        List<Set> setList = session.createQuery("FROM Set WHERE id = " + id).list();
-        return setList;
+        if (id == 0L) {
+            Random rand = new Random();
+            int max = ((Number)session.createQuery("select count(*) from Set").uniqueResult()).intValue();
+            int n = rand.nextInt(max) + 1;
+            System.out.println(n);
+            id = Long.valueOf(n);
+        }
+        return session.createQuery("FROM Set WHERE id = " + id).list();
     }
 }
