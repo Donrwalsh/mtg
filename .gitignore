@@ -1,6 +1,7 @@
 builder/venv
 builder/source/AllSets-x.json
 builder/database/identity.py
+data-tool/venv
 images/
 *.pyc
 .properties
