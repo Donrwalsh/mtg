@@ -62,3 +62,6 @@ class Database(DataSource):
         except UnicodeEncodeError as e:
             Writer.SQL_error("Critical encoding error:", e, query)
             exit()
+
+    def set_by_code(self, code):
+        return next(item for item in self.sets if item['code'] == code)

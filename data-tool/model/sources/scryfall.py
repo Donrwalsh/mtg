@@ -41,3 +41,6 @@ class Scryfall(DataSource):
 
     def set_data_date(self):
         return os.path.getmtime(self.local_storage + "sets.txt")
+
+    def set_by_code(self, code):
+        return next(item for item in self.sets if item['code'] == code)

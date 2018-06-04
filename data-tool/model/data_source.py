@@ -16,5 +16,3 @@ class DataSource(object):
     def sets_initiate(self):
         pass
 
-    def set_by_code(self, code):
-        return next(item for item in self.sets if item['code'] == code)
