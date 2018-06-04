@@ -3,6 +3,7 @@ import pymysql
 import identity
 from writer_service import Writer
 from model.database_tables import *
+from helper_service import Helper
 
 
 class Database(DataSource):
@@ -36,6 +37,20 @@ class Database(DataSource):
 
     def build_sets_table(self):
         self.query(SETS)
+
+    def add_set(self, sets):
+        self.query(SETS_INSERT +
+              Helper.select_for_query(sets, 'code') + ", "
+                   + Helper.select_for_query(sets, 'name') + ", "
+                   + Helper.select_for_query(sets, 'set_type') + ", "
+                   + Helper.select_for_query(sets, 'released_at') + ", "
+                   + Helper.select_for_query(sets, 'block') + ", "
+                   + Helper.select_for_query(sets, 'block_code') + ", "
+                   + Helper.select_for_query(sets, 'parent_set_code') + ", "
+                   + Helper.select_for_query(sets, 'card_count') + ", "
+                   + Helper.select_for_query(sets, 'border')
+                   + ");")
+
 
     def query(self, query):
         try:

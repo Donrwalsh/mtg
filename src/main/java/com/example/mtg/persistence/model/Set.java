@@ -11,32 +11,40 @@ public class Set {
 
 
     private Long id;
-    private String name;
     private String code;
-    private String releaseDate;
-    private String border;
+    private String name;
     private String type;
-    private boolean onlineOnly;
+    private String release_date;
+    private String block;
+    private String block_code;
+    private String parent_set_code;
+    private Long card_count;
+    private String border;
+//    private boolean onlineOnly;
 
     public Set() {
     }
 
-    public Set(Long id, String name, String code, String releaseDate, String border, String type, boolean onlineOnly) {
+    public Set(Long id, String code, String name, String type, String release_date, String block, String block_code,
+               String parent_set_code, Long card_count, String border) {
         this.id = id;
-        this.name = name;
         this.code = code;
-        this.releaseDate = releaseDate;
-        this.border = border;
+        this.name = name;
         this.type = type;
-        this.onlineOnly = onlineOnly;
+        this.release_date = release_date;
+        this.block = block;
+        this.block_code = block_code;
+        this.parent_set_code = parent_set_code;
+        this.card_count = card_count;
+        this.border = border;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public String getRelease_date() {
+        return release_date;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
     }
 
     public String getBorder() {
@@ -55,12 +63,36 @@ public class Set {
         this.type = type;
     }
 
-    public boolean isOnlineOnly() {
-        return onlineOnly;
+    public String getBlock() {
+        return block;
     }
 
-    public void setOnlineOnly(boolean onlineOnly) {
-        this.onlineOnly = onlineOnly;
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getBlock_code() {
+        return block_code;
+    }
+
+    public void setBlock_code(String block_code) {
+        this.block_code = block_code;
+    }
+
+    public String getParent_set_code() {
+        return parent_set_code;
+    }
+
+    public void setParent_set_code(String parent_set_code) {
+        this.parent_set_code = parent_set_code;
+    }
+
+    public Long getCard_count() {
+        return card_count;
+    }
+
+    public void setCard_count(Long card_count) {
+        this.card_count = card_count;
     }
 
     @Id

@@ -26,7 +26,7 @@ public class SetDAOImpl implements SetDAO {
     @Override
     public List<Set> getSets() {
         Session session = this.sessionFactory.openSession();
-        List<Set> setList = session.createQuery("FROM Set").list();
+        List<Set> setList = session.createQuery("FROM com.example.mtg.persistence.model.Set").list();
         return setList;
     }
 
