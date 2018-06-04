@@ -5,7 +5,7 @@ from writer_service import Writer
 from model.data_source import DataSource
 
 
-class ScryfallService(DataSource):
+class Scryfall(DataSource):
 
     def __init__(self, **kwargs):
         self.local_storage = "data/scryfall/"

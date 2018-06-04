@@ -1,6 +1,5 @@
 import argparse
-import scryfall_service
-import database_service
+from model.sources import scryfall, database
 import pprint
 from writer_service import Writer
 
@@ -9,40 +8,20 @@ parser.add_argument("--update", help="force download of source data", action="st
 args = parser.parse_args()
 
 Writer.action("DATA SOURCE |   SETS   | COUNT | \n")
-Scryfall = scryfall_service.ScryfallService(update=args.update)
-Database = database_service.DatabaseService(update=args.update)
+Scryfall = scryfall.Scryfall(update=args.update)
+Database = database.Database(update=args.update)
 
 
 
 primary = Scryfall.sets
 
-# pprint.pprint(Database.sets)
+for set in primary:
 
-# pprint.pprint(primary[0])
-# pprint.pprint(primary[300])
-# pprint.pprint(len(primary))
-
-# for set in primary:
-#     pprint.pprint(set)
-#     exit()
-
-# pprint.pprint(Scryfall.sets[0])
-
-
-# Writer.action("Let's get started")
-# pprint.pprint(time.struct_time(time_dif))
-
-#
-# for set in reversed(Scryfall.load_set_data()):
-#     pprint.pprint(set)
-
-
-# for set in reversed():
-#     print(set)
-
-    #TODO: Retrieve 3 different set data
-    #TODO: Iterate over the primary source data:
-        #TODO: Verify/add data to database
-        #TODO: Report discrepencies
-
-#Cards
+    #Look for set in database
+    try:
+        Database.set_by_code(set['code'])
+        #TODO: The set exists, verify the set's contents.
+    except StopIteration:
+        #TODO: The set does not exist. Add the set.
+        print("Set does not exist")
+    exit()
