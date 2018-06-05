@@ -12,23 +12,23 @@ import java.util.List;
 public class CardService {
 
     @Autowired
-    private CardDAO CD;
+    private CardDAO cardDAO;
     @Autowired
-    private MultiValuesDAO MVD;
+    private MultiValuesDAO multiValuesDAO;
 
     private void AppendMultivalues(Card card) {
-        card.setNames(MVD.GetNamesByID(card.getId()));
-        card.setColors(MVD.GetColorsByID(card.getId()));
-        card.setColorIdentity(MVD.GetColorIdentityByID(card.getId()));
-        card.setSuperTypes(MVD.GetSuperTypesByID(card.getId()));
-        card.setTypes(MVD.GetTypesByID(card.getId()));
-        card.setSubTypes(MVD.GetSubTypesByID(card.getId()));
-        card.setVariations(MVD.GetVariationsByID(card.getId()));
+        card.setNames(multiValuesDAO.GetNamesByID(card.getId()));
+        card.setColors(multiValuesDAO.GetColorsByID(card.getId()));
+        card.setColorIdentity(multiValuesDAO.GetColorIdentityByID(card.getId()));
+        card.setSuperTypes(multiValuesDAO.GetSuperTypesByID(card.getId()));
+        card.setTypes(multiValuesDAO.GetTypesByID(card.getId()));
+        card.setSubTypes(multiValuesDAO.GetSubTypesByID(card.getId()));
+        card.setVariations(multiValuesDAO.GetVariationsByID(card.getId()));
     }
 
     public List<Card> ConstructCardByID(Long id) {
 
-        List<Card> response = CD.getACard(id);
+        List<Card> response = cardDAO.getACard(id);
         for (Card card : response) {
             AppendMultivalues(card);
         }
@@ -39,7 +39,7 @@ public class CardService {
         System.out.println(name);
         System.out.println(set);
 
-        List<Card> response = CD.getCards(name, set);
+        List<Card> response = cardDAO.getCards(name, set);
         for (Card card : response) {
             AppendMultivalues(card);
         }
@@ -48,7 +48,7 @@ public class CardService {
 
     public List<Card> ConstructRandomCard() {
 
-        List<Card> response = CD.getRandomCard();
+        List<Card> response = cardDAO.getRandomCard();
         for (Card card : response) {
             AppendMultivalues(card);
         }

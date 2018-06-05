@@ -62,3 +62,10 @@ tr {
     width: 9.5rem;
 }
 
+.set-icon {
+    height: 2rem;
+}
+
+.caps {
+    text-transform: uppercase;
+}

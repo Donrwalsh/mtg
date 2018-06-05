@@ -13,6 +13,24 @@ $(function () {
         }
     });
 
+    $('#bSet').click(function() {
+        let call = "/v0/set";
+        if ( $("#idSet").val() ) {
+            call += "?id=" + $("#idSet").val();
+        }
+        $.ajax({
+            type: "GET",
+            url: call,
+            success: function (response) {
+                handle_successful_response(response, 'set');
+            },
+            error: function (errmsg, txtstatus) {
+                let msg = JSON.parse(errmsg.responseText).message;
+                console.log(msg);
+            }
+        });
+    });
+
     $('#bCard').click(function() {
         let call = "/v0/card";
         if( $("#idCard").val() ) {
@@ -22,7 +40,7 @@ $(function () {
             type: "GET",
             url: call,
             success: function (response) {
-                handle_successful_response(response);
+                handle_successful_response(response, 'card');
             },
             error: function (errmsg, txtstatus) {
                 let msg = JSON.parse(errmsg.responseText).message;
@@ -56,7 +74,7 @@ $(function () {
             type: "GET",
             url: call,
             success: function (response) {
-                handle_successful_response(response);
+                handle_successful_response(response, 'card');
             },
             error: function (errmsg, txtstatus) {
                 let msg = JSON.parse(errmsg.responseText).message;

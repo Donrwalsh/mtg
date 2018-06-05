@@ -8,28 +8,11 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">MTG Don</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="apis.html" method="GET">APIs <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="card?id=0" method="GET">Random Card <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input id="header-search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <div></div>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search (I do nothing)</button>
-        </form>
-    </div>
-</nav>
+<script type="text/javascript" src="js/header.js"></script>
+<script>
+    document.getElementById('#containing-element').innerHTML(header);
+</script>
+<div id="header"></div>
 <div>
     <h1 class="title">APIs</h1>
     <hr>
@@ -84,6 +67,29 @@
             </tr>
             </tbody>
         </table>
+            <h2 class="small-title">sets</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Endpoint</th>
+                    <th>Params</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><button id="bSet" type="button" class="btn btn-primary">Try</button></td>
+                    <td>/v0/set</td>
+                    <td>?id=<input class="apiButton" id="idSet" type="text" placeholder="Long"></td>
+                </tr>
+                <tr disabled="true">
+                    <td><button id="bSets" type="button" class="btn btn-primary">Try</button></td>
+                    <td>/v0/sets</td>
+                    <td>?code=<input class="apiButton" id="codeSets" type="text" placeholder="String"></td>
+                    <td>?id=<input class="apiButton" id="idSets" type="text" placeholder="Long"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -97,6 +103,7 @@
 <script src="js/helper/api_helper.js"></script>
 <script src="js/apis.js"></script>
 <script src="js/search.js"></script>
+<script src="js/common.js"></script>
 
 </body>
 

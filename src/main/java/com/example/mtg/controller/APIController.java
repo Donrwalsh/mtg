@@ -1,8 +1,12 @@
 package com.example.mtg.controller;
 
-import com.example.mtg.dao.MultiValuesDAO;
+
+
+import com.example.mtg.dao.SetDAO;
 import com.example.mtg.model.Card;
+import com.example.mtg.persistence.model.Set;
 import com.example.mtg.service.CardService;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,9 +18,11 @@ import java.util.List;
 public class APIController {
 
     @Autowired
-    private MultiValuesDAO ND;
+    private SetDAO setDAO;
     @Autowired
-    private CardService CS;
+    private CardService cardService;
+    @Autowired
+    SessionFactory sessionFactory;
 
     @RequestMapping("v0/cards")
     public List<Card> cards(@RequestParam(value="name", defaultValue="") String name,
@@ -29,8 +35,7 @@ public class APIController {
         }
         String constructed_name = "%" + name + "%";
 
-        List<Card> response = CS.GetAllCards(constructed_name, longSet);
-        return response;
+        return cardService.GetAllCards(constructed_name, longSet);
     }
 
     @RequestMapping("v0/card")
@@ -43,12 +48,36 @@ public class APIController {
         }
 
         if (longId == 0L) {
-            return CS.ConstructRandomCard();
+            return cardService.ConstructRandomCard();
         } else {
-            return CS.ConstructCardByID(longId);
+            return cardService.ConstructCardByID(longId);
         }
 
-//        return response;
+    }
+
+    @RequestMapping("v0/sets")
+    public List<Set> sets() {
+//        Session session;
+//        try {
+//            session = sessionFactory.getCurrentSession();
+//        } catch (HibernateException e) {
+//            session = sessionFactory.openSession();
+//        }
+////        Session session session= this.sessionFactory.getCurrentSession();
+//        List<Set> sets = session.createQuery("FROM Set").getSets();
+        return setDAO.getSets();
+    }
+
+    @RequestMapping("v0/set")
+    public List<Set> set(@RequestParam(value="id", defaultValue="0") String id) {
+        Long longId;
+        try {
+            longId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            longId = 0L;
+        }
+
+        return setDAO.getASet(longId);
     }
 
 }
