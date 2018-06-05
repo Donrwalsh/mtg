@@ -1,4 +1,6 @@
 import argparse
+from urllib.request import urlretrieve
+import os
 from model.sources import scryfall, mtgjson, database
 import pprint
 from writer_service import Writer
@@ -31,5 +33,15 @@ for set in primary:
     except StopIteration:
         Database.add_set([set, set_2])
 
-    pprint.pprint(set)
-    exit()
+    # Set Images
+    svg_img_path = '../src/main/resources/static/images/sets/' + (set['code'] if set['code'] != 'con' else '_' + set['code']) + '.svg'
+    if not os.path.isfile(svg_img_path):
+        urlretrieve(set['icon_svg_uri'], svg_img_path)
+
+    # else:
+    #     pprint.pprint("set icon exists")
+
+    # pprint.pprint(os.getcwd())
+    # pprint.pprint(os.path.isfile(''))
+    # pprint.pprint(set)
+    # exit()

@@ -4,10 +4,11 @@ $(document).ready(function() {
         url: "/v0/sets",
         success: function (response) {
             $.each(response, function (i, response) {
+                let code = response.code === "con" ? "_con" : response.code;
                 let thing = "<tr>" +
-                    "<td><img src='../images/sets/lea.svg'></td>" +
+                    "<td><img class='set-icon' src='../images/sets/" + code + ".svg'></td>" +
                     "<td>" + response.name + "</td>";
-                thing += "<td>" + response.code + "</td>";
+                thing += "<td class='caps'>" + response.code + "</td>";
                 thing += "<td>" + response.type + "</td>";
                 thing += "<td>" + response.release_date + "</td></tr>";
                 $('#sets-table').append(thing);
