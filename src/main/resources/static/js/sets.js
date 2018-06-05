@@ -16,7 +16,7 @@ $(document).ready(function() {
             $('.container-fluid').show();
         },
         error: function (errmsg, txtstatus) {
-            let msg = JSON.parse(errms.responseText).message;
+            let msg = JSON.parse(errmsg.responseText).message;
             console.log(msg)
         }
     });
