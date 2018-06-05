@@ -34,9 +34,14 @@ for set in primary:
         Database.add_set([set, set_2])
 
     # Set Images
-    svg_img_path = '../src/main/resources/static/images/sets/' + (set['code'] if set['code'] != 'con' else '_' + set['code']) + '.svg'
+    svg_img_dir = '../src/main/resources/static/images/sets/'
+    if not os.path.isdir(svg_img_dir):
+        os.makedirs("../src/main/resources/static/images/sets/")
+
+    svg_img_path = svg_img_dir + (set['code'] if set['code'] != 'con' else '_' + set['code']) + '.svg'
     if not os.path.isfile(svg_img_path):
         urlretrieve(set['icon_svg_uri'], svg_img_path)
+
 
     # else:
     #     pprint.pprint("set icon exists")
