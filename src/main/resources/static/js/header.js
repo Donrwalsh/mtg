@@ -1,0 +1,1 @@
+var header = '<p>I come from javascript</p>';
