@@ -24,7 +24,7 @@
 		<java.version>1.8</java.version>
         <tomcat-dbcp.version>8.5.8</tomcat-dbcp.version>
         <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-        <org.springframework.data.version>1.10.5.RELEASE</org.springframework.data.version>
+        <org.springframework.data.version>2.0.2.RELEASE</org.springframework.data.version>
 	</properties>
 
 	<dependencies>

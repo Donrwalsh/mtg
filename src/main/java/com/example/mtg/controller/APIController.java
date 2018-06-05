@@ -6,6 +6,7 @@ import com.example.mtg.dao.SetDAO;
 import com.example.mtg.model.Card;
 import com.example.mtg.persistence.model.Set;
 import com.example.mtg.service.CardService;
+import com.example.mtg.service.SetService;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,10 @@ public class APIController {
     private CardService cardService;
     @Autowired
     SessionFactory sessionFactory;
+    @Autowired
+    private SetService setService;
+
+//    SetService setService = getBean(SetService.class);
 
     @RequestMapping("v0/cards")
     public List<Card> cards(@RequestParam(value="name", defaultValue="") String name,
@@ -77,7 +82,8 @@ public class APIController {
             longId = 0L;
         }
 
-        return setDAO.getASet(longId);
+        return setService.findByid(longId);
+//        return setDAO.getASet(longId);
     }
 
 }
