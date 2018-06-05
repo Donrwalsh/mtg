@@ -23,11 +23,6 @@ for set in primary:
     except KeyError:
         set_2 = {}
 
-    # pprint.pprint(set)
-
-    # pprint.pprint(Database.set_by_code(set['code']))
-    # exit()
-
     #Look for set in database
     try:
         if not Helper.validate_set(Database.set_by_code(set['code']), [set, set_2]):
@@ -35,3 +30,6 @@ for set in primary:
         #TODO: The set exists, verify the set's contents.
     except StopIteration:
         Database.add_set([set, set_2])
+
+    pprint.pprint(set)
+    exit()

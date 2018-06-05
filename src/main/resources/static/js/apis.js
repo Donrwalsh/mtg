@@ -29,7 +29,7 @@ $(function () {
                 console.log(msg);
             }
         });
-    })
+    });
 
     $('#bCard').click(function() {
         let call = "/v0/card";
