@@ -9,7 +9,12 @@ images/
 ### Came from Spring Initializr: ###
 
 first_attempt/target/
-.mvn/wrapper/maven-wrapper.jar
+first_attempt/\.mvn/wrapper/maven-wrapper.jar
+first_attempt/\.mvn/wrapper/maven-wrapper.properties
+JDBC_Only/target/
+JDBC_Only/\.mvn/wrapper/maven-wrapper.jar
+JDBC_Only/\.mvn/wrapper/maven-wrapper\.properties
+
 
 ### STS ###
 .apt_generated
@@ -33,3 +38,4 @@ first_attempt/target/
 /dist/
 /nbdist/
 /.nb-gradle/
+JDBC_Only/\.mvn/wrapper/maven-wrapper\.properties

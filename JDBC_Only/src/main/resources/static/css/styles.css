@@ -1,0 +1,71 @@
+.title {
+    text-align: center;
+}
+
+.output {
+    max-width: 40%;
+    float: left;
+}
+
+.output .output-navigation {
+    height: 3rem;
+    position: relative;
+    border-bottom-width: 0px;
+    border-bottom-color: rgb(222,226,230);
+    border-bottom-style: solid;
+}
+
+.output .output-tabs {
+    border-bottom-width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+
+.output .output-tabs li {
+    display: none;
+}
+
+.output .response-output {
+    display: none;
+    border: 1px;
+    border-style: solid;
+    border-color: rgb(222,226,230);
+    border-top: none;
+    padding: .75rem;
+    margin-bottom: .75em;
+}
+
+.output .response-output p {
+    margin-bottom: 0;
+}
+
+.input {
+    max-width: 60%;
+    float: left;
+}
+
+.small-title {
+    text-align: center;
+    height: 3rem;
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-bottom: none;
+}
+
+tr {
+    height: 4rem;
+}
+
+.apiButton {
+    width: 9.5rem;
+}
+
+.set-icon {
+    height: 2rem;
+}
+
+.caps {
+    text-transform: uppercase;
+}
