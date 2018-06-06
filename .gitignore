@@ -1,14 +1,14 @@
-builder/venv
-builder/source/AllSets-x.json
-builder/database/identity.py
-data-tool/venv
+python/builder.old/venv
+python/builder.old/source/AllSets-x.json
+python/builder.old/database/identity.py
+python/data-tool/venv
 images/
 *.pyc
 .properties
 
 ### Came from Spring Initializr: ###
 
-/target/
+Attempt 01/target/
 .mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
