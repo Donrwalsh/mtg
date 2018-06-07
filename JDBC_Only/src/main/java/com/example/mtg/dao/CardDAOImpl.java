@@ -15,34 +15,48 @@ public class CardDAOImpl implements CardDAO {
     @Autowired
     private DatabaseService databaseService;
 
+    private Card responseToCard(ResultSet response) throws Exception {
+        Card responseCard = new Card(
+                response.getLong("id"),
+                response.getString("name"),
+                response.getString("manaCost"),
+                response.getInt("cmc"),
+                response.getInt("set"),
+                response.getString("rarity"),
+                response.getString("text"),
+                response.getString("flavor"),
+                response.getString("artist"),
+                response.getString("number"),
+                response.getString("power"),
+                response.getString("toughness"),
+                response.getString("loyalty"),
+                response.getInt("multiverseid"),
+                response.getString("watermark"),
+                response.getString("border"),
+                response.getString("layout"),
+                response.getBoolean("timeshifted"),
+                response.getBoolean("reserved"),
+                response.getBoolean("starter")
+        );
+        return responseCard;
+    }
+
+    @Override
+    public List<Card> getACard(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT * FROM `cards` WHERE id = " + id.toString());
+        List<Card> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(responseToCard(response));
+        }
+        return result;
+    }
+
     @Override
     public List<Card> getRandomCard() throws Exception {
         ResultSet response = databaseService.performQuery("SELECT * FROM `cards` ORDER BY RAND() LIMIT 1");
         List<Card> result = new ArrayList<>();
         while (response.next()) {
-            Card responseCard = new Card(
-                    response.getLong("id"),
-                    response.getString("name"),
-                    response.getString("manaCost"),
-                    response.getInt("cmc"),
-                    response.getInt("set"),
-                    response.getString("rarity"),
-                    response.getString("text"),
-                    response.getString("flavor"),
-                    response.getString("artist"),
-                    response.getString("number"),
-                    response.getString("power"),
-                    response.getString("toughness"),
-                    response.getString("loyalty"),
-                    response.getInt("multiverseid"),
-                    response.getString("watermark"),
-                    response.getString("border"),
-                    response.getString("layout"),
-                    response.getBoolean("timeshifted"),
-                    response.getBoolean("reserved"),
-                    response.getBoolean("starter")
-            );
-            result.add(responseCard);
+            result.add(responseToCard(response));
         }
         return result;
     }

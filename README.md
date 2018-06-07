@@ -27,7 +27,8 @@
 In its current state, the v0/card endpoint is actually returning a card (no multi-values) 
 
 TODOS
-
-* Add multi-value support (likely within the Card DAO itself, not a separate DAO
+* set endpoint
+* sets endpoint
+* cards endpoint
 * Overall error handling, which leads into:
 * API Payload construction. This should be generic to apply to all iterations of this project, and should include error messages + other relevant pieces. This may wind up going one of many different ways, but the important factor is rigging this up to return more than just data (while still returning data, of course).

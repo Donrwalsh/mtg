@@ -13,6 +13,19 @@ public class CardService {
     @Autowired
     private CardDAO cardDAO;
 
+    public List<Card> ConstructCardById(Long id) {
+        List<Card> response = null;
+        try {
+            response = cardDAO.getACard(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        for (Card card : response) {
+            AppendMultiValues(card);
+        }
+        return response;
+    }
+
     public List<Card> ConstructRandomCard() {
         List<Card> response = null;
         try {

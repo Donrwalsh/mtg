@@ -27,8 +27,8 @@ public class APIController {
         if (longId == 0L) {
             return cardService.ConstructRandomCard();
         } else {
-//            return cardService.ConstructCardByID(longId);
-            return cardService.ConstructRandomCard();
+            return cardService.ConstructCardById(longId);
+//            return cardService.ConstructRandomCard();
         }
 
 
