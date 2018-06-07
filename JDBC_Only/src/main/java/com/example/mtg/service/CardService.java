@@ -21,7 +21,26 @@ public class CardService {
             System.out.println(e.getMessage());
         }
 
-        //append multi-values
+        for (Card card : response) {
+            AppendMultiValues(card);
+        }
         return response;
     }
+
+    private void AppendMultiValues(Card card) {
+        try {
+            card.setNames(cardDAO.getNamesById(card.getId()));
+            card.setColors(cardDAO.getColorsById(card.getId()));
+            card.setColorIdentity(cardDAO.getColorIdentityById(card.getId()));
+            card.setSuperTypes(cardDAO.getSuperTypesById(card.getId()));
+            card.setTypes(cardDAO.getTypesById(card.getId()));
+            card.setSubTypes(cardDAO.getSubTypesById(card.getId()));
+            card.setVariations(cardDAO.getVariationsById(card.getId()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+
 }

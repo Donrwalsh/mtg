@@ -46,4 +46,74 @@ public class CardDAOImpl implements CardDAO {
         }
         return result;
     }
+
+    @Override
+    public List<String> getNamesById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT name FROM `names` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("name"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getColorsById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT color FROM `colors` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("color"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getColorIdentityById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT color FROM `color_identities` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("color"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getSuperTypesById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT supertype FROM `supertypes` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("supertype"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getTypesById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT type FROM `types` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("type"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getSubTypesById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT subtype FROM `subtypes` WHERE card_id = " + id.toString());
+        List<String> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getString("subtype"));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Integer> getVariationsById(Long id) throws Exception {
+        ResultSet response = databaseService.performQuery("SELECT variant_id FROM `variations` WHERE card_id = " + id.toString());
+        List<Integer> result = new ArrayList<>();
+        while (response.next()) {
+            result.add(response.getInt("variant_id"));
+        }
+        return result;
+    }
 }
