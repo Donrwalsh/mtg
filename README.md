@@ -18,3 +18,16 @@
   * Take a peak at the benefits that JDBCTemplate adds above just the Driver. Cards from first_attempt utilizes this approach.
 3. JPA
   * Connect to the database and deliver API data using the Java Persistence API. No available example for this just yet.
+  
+  
+##### Notes on in-progress tasks:
+
+#####JDBCSimple:
+
+In its current state, the v0/card endpoint is actually returning a card (no multi-values) 
+
+TODOS
+
+* Add multi-value support (likely within the Card DAO itself, not a separate DAO
+* Overall error handling, which leads into:
+* API Payload construction. This should be generic to apply to all iterations of this project, and should include error messages + other relevant pieces. This may wind up going one of many different ways, but the important factor is rigging this up to return more than just data (while still returning data, of course).
