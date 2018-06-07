@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -17,7 +18,7 @@ public class CardDAOImpl implements CardDAO {
     @Override
     public List<Card> getRandomCard() throws Exception {
         ResultSet response = databaseService.performQuery("SELECT * FROM `cards` ORDER BY RAND() LIMIT 1");
-        List<Card> result = null;
+        List<Card> result = new ArrayList<>();
         while (response.next()) {
             Card responseCard = new Card(
                     response.getLong("id"),
@@ -41,10 +42,8 @@ public class CardDAOImpl implements CardDAO {
                     response.getBoolean("reserved"),
                     response.getBoolean("starter")
             );
-//            System.out.println(responseCard);
             result.add(responseCard);
         }
-        System.out.println(result);
         return result;
     }
 }

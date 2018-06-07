@@ -98,4 +98,8 @@ public class Card {
     public void setTypes(List<String> types) { this.types = types; }
     public void setSubTypes(List<String> subtypes) { this.subtypes = subtypes; }
     public void setVariations(List<Integer> variations) { this.variations = variations; }
+
+    public String toString() {
+        return "Card: [Name: '" + this.getName() + "']";
+    }
 }
