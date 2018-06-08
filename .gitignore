@@ -1,3 +1,10 @@
+### Python Data Files ###
+python/data-tool/data/mtgjson/sets.txt
+python/data-tool/data/scryfall/sets.txt
+
+
+--Old:
+
 python/builder.old/venv
 python/builder.old/source/AllSets-x.json
 python/builder.old/database/identity.py

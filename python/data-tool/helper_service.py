@@ -1,3 +1,6 @@
+from writer_service import Writer
+
+
 class Helper:
 
     @classmethod
@@ -29,7 +32,7 @@ class Helper:
                     if str(subject[key]) == 'None' and str(Helper.select(legend, check_key) is 'null'):
                         pass
                     else:
-                        print(str(subject[key]))
-                        print(str(Helper.select(legend, check_key)))
+                        Writer.error("data mismatch on " + subject['code'] + "[" + key + "]",
+                            "   data-source: " + str(subject[key]) + ", database: " + str(Helper.select(legend, check_key)) + "\n")
                         return False
         return True

@@ -28,12 +28,13 @@ for set in primary:
     #Look for set in database
     try:
         if not Helper.validate_set(Database.set_by_code(set['code']), [set, set_2]):
-            print("I found a problem")
+            pass
+            # print("I found a problem")
         #TODO: The set exists, verify the set's contents.
     except StopIteration:
         Database.add_set([set, set_2])
 
-    # Set Images
+    # Set Icon Images
     svg_img_dir = '../src/main/resources/static/images/sets/'
     if not os.path.isdir(svg_img_dir):
         os.makedirs("../src/main/resources/static/images/sets/")
