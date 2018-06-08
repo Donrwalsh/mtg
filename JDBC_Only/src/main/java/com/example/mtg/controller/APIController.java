@@ -28,15 +28,13 @@ public class APIController {
             return cardService.ConstructRandomCard();
         } else {
             return cardService.ConstructCardById(longId);
-//            return cardService.ConstructRandomCard();
         }
-
-
     }
 
 //    @RequestMapping("v0/cards")
 //    public List<Card> cards(@RequestParam(value="name", defaultValue="") String name,
 //                            @RequestParam(value="set", defaultValue="") String set) {
+//
 //
 //    }
 }

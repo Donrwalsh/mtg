@@ -14,7 +14,7 @@ $(function () {
     });
 
     $('#bSet').click(function() {
-        let call = "/v0/set";
+        let call = "/mtg/v0/set";
         if ( $("#idSet").val() ) {
             call += "?id=" + $("#idSet").val();
         }
@@ -32,7 +32,7 @@ $(function () {
     });
 
     $('#bCard').click(function() {
-        let call = "/v0/card";
+        let call = "/mtg/v0/card";
         if( $("#idCard").val() ) {
             call += "?id=" + $("#idCard").val();
         }
@@ -50,7 +50,7 @@ $(function () {
     });
 
     $('#bCards').click(function() {
-        let call = "/v0/cards";
+        let call = "/mtg/v0/cards";
         let params = false;
         if( $('#nameCards').val() ) {
             if (params) {

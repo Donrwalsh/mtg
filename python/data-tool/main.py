@@ -8,9 +8,10 @@ from helper_service import Helper
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--update", help="force download of source data", action="store_true")
+parser.add_argument("--write", help="in the case of data mismatches, the database will be updated", action="store_true")
 args = parser.parse_args()
 
-Writer.action("DATA SOURCE |   SETS   | COUNT | \n")
+Writer.action("DATA SOURCE |   SETS   | COUNT | SETS_IMGS \n")
 Scryfall = scryfall.Scryfall(update=args.update)
 Mtgjson = mtgjson.Mtgjson(update=args.update)
 Database = database.Database()
@@ -28,9 +29,8 @@ for set in primary:
     #Look for set in database
     try:
         if not Helper.validate_set(Database.set_by_code(set['code']), [set, set_2]):
+            #TODO: Based on read vs write, do something about the failed validation.
             pass
-            # print("I found a problem")
-        #TODO: The set exists, verify the set's contents.
     except StopIteration:
         Database.add_set([set, set_2])
 

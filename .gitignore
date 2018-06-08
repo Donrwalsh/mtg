@@ -2,6 +2,11 @@
 python/data-tool/data/mtgjson/sets.txt
 python/data-tool/data/scryfall/sets.txt
 
+### Properties Files ###
+JDBC_Only/src/main/resources/application.properties
+
+### War Outputs ###
+JDBC_Only/out/artifacts/jdbc_simple/jdbc-simple.war
 
 --Old:
 
